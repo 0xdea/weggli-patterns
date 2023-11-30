@@ -5,10 +5,10 @@
 [![](https://img.shields.io/badge/twitter-%400xdea-blue.svg)](https://twitter.com/0xdea)
 [![](https://img.shields.io/badge/mastodon-%40raptor-purple.svg)](https://infosec.exchange/@raptor)
 
-> "If you shame attack research, you misjudge its contribution.  
-> Offense and defense aren't peers. Defense is offense's child."
+> "No one gives a s*** about the old scene people anymore I’m sure,  
+> bunch of old a** people grepping for the last of the memcpy." 
 > 
-> -- John Lambert
+> -- Bas Alberts
 
 A collection of my weggli patterns to facilitate vulnerability research.
 
