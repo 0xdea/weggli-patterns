@@ -86,6 +86,12 @@ weggli -R 'func=syslog$' '{$func(_);}' .
 
 ## memory management
 
+### use of uninitialized pointers
+```
+weggli '{_* $p; not: $p =_; $func(&$p);}' .
+weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
+```
+
 ## command injection
 
 ## race conditions
