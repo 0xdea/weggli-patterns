@@ -16,20 +16,24 @@ See also:
 https://github.com/weggli-rs/weggli  
 https://twitter.com/richinseattle/status/1729654184633327720  
 
-## C/C++
+## buffer overflows
 
-### buffer overflows
+## integer overflows
 
-### integer overflows
+## format strings
 
-### format strings
+## memory management
 
-### memory management
+## command injection
 
-### command injection
+## race conditions
 
-### race conditions
+## privilege management
 
-### privilege management
+### unchecked return code of setuid() and seteuid()
+```
+$ weggli --cpp '{strict: setuid(_);}' . -e c
+$ weggli --cpp '{strict: seteuid(_);}' . -e c
+```
 
-### miscellaneous
+## miscellaneous
