@@ -20,8 +20,8 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ### lack of explicit NUL-termination after strncpy() and stpncpy()
 ```
-$ weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
-$ weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
+weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
+weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 ```
 
 ## integer overflows
@@ -33,6 +33,11 @@ weggli '{short $len; $len=strlen(_);}' .
 
 ## format strings
 
+### find printf() family functions
+```
+weggli -R 'func=printf$' '{$func(_);}' .
+```
+
 ## memory management
 
 ## command injection
@@ -43,8 +48,8 @@ weggli '{short $len; $len=strlen(_);}' .
 
 ### unchecked return code of setuid() and seteuid()
 ```
-$ weggli '{strict: setuid(_);}' .
-$ weggli '{strict: seteuid(_);}' .
+weggli '{strict: setuid(_);}' .
+weggli '{strict: seteuid(_);}' .
 ```
 
 ## miscellaneous
