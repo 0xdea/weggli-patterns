@@ -99,3 +99,9 @@ weggli '{strict: seteuid(_);}' .
 ```
 
 ## miscellaneous
+
+### command-line argument or environment variable access
+```
+weggli '{argv[_];}' .
+weggli '{envp[_];}' .
+```
