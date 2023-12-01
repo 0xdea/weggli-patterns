@@ -43,6 +43,7 @@ weggli '{$ret=wcslcat($buf,_,_);}'
 ### direct write into buffer allocated on the stack
 ```
 weggli '{_ $buf[]; strncpy($buf,_,_);}' .
+weggli -R 'func=^mem' '{_ $buf[_]; $func($buf,_,_);}' .
 
 # some variants
 # strcpy, strncpy, stpcpy, stpncpy, strlcpy
@@ -57,6 +58,18 @@ weggli '{_ $buf[]; strncpy($buf,_,_);}' .
 ```
 
 ## integer overflows
+
+### signed or short sizes, lengths, offsets, counts
+```
+weggli '{short _;}' .
+weggli '{int _;}' .
+
+# some variants
+# short int
+# unsigned short
+# unsigned short int
+# int
+```
 
 ### casting the return value of strlen(), wcslen() to short
 ```
@@ -94,7 +107,11 @@ weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
 
 ## command injection
 
+TBD
+
 ## race conditions
+
+TBD
 
 ## privilege management
 
