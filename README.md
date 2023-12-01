@@ -22,13 +22,16 @@ https://twitter.com/richinseattle/status/1729654184633327720
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
 weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
+
+# some variants
+# read(), readlink(), fread(), memcpy(), etc.
 ```
 
 ### potentially unsafe use of the return value of snprintf(), etc.
 ```
 weggli '{$ret=snprintf($buf,_,_);}'
 weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
-...
+
 # some variants
 weggli '{$ret=vsnprintf($buf,_,_);}'
 weggli '{$ret=strlcpy($buf,_,_);}'
@@ -40,20 +43,45 @@ weggli '{$ret=wcslcat($buf,_,_);}'
 ### direct write into buffer allocated on the stack
 ```
 weggli '{_ $buf[]; strncpy($buf,_,_);}' .
+
+# some variants
+# strcpy, strncpy, stpcpy, stpncpy, strlcpy
+# wcscpy, wcsncpy, wcpcpy, wcpncpy, wcslcpy
+# strcat, strncat, strlcat, wcscat, wcsncat, wcslcat
+# memcpy, memccpy, memmove, memset, wmemcpy, wmemmove, wmemset
+# sprintf, vsprintf, snprintf, vsnprintf
+# gets, fgets, getwd, getcwd, fread
+# bcopy
+# read, pread, recv, recvfrom
+# simple assignment
 ```
 
 ## integer overflows
 
-### casting the return value of strlen() to short
+### casting the return value of strlen(), wcslen() to short
 ```
 weggli '{short $len; $len=strlen(_);}' .
+weggli '{short $len; $len=wcslen(_);}' .
+
+# some variants
+# short int
+# unsigned short
+# unsigned short int
 ```
 
 ## format strings
 
-### find printf() family functions
+### find printf(), scanf(), syslog() family functions
 ```
 weggli -R 'func=printf$' '{$func(_);}' .
+weggli -R 'func=scanf$' '{$func(_);}' .
+weggli -R 'func=syslog$' '{$func(_);}' .
+
+# some variants
+# printk
+# warn, vwarn, warnx, vwarnx
+# err, verr, errx, verrx, warnc, vwarnc
+# errc, verrc
 ```
 
 ## memory management
