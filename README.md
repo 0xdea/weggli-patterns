@@ -18,6 +18,12 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ## buffer overflows
 
+### lack of explicit NUL-termination after strncpy() and stpncpy()
+```
+$ weggli --cpp '{strncpy($buf,_); not: $buf[_]=_;}' . -e c
+$ weggli --cpp '{stpncpy($buf,_); not: $buf[_]=_;}' . -e c
+```
+
 ## integer overflows
 
 ## format strings
