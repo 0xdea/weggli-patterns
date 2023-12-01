@@ -18,16 +18,23 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ## buffer overflows
 
-### lack of explicit NUL-termination after strncpy() and stpncpy()
+### lack of explicit NUL-termination after strncpy(), etc.
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
 weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 ```
 
-### potentially unsafe use of the return value of snprintf() and vsnprintf()
+### potentially unsafe use of the return value of snprintf(), etc.
 ```
 weggli '{$ret=snprintf($buf,_,_);}'
 weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
+...
+# some variants
+weggli '{$ret=vsnprintf($buf,_,_);}'
+weggli '{$ret=strlcpy($buf,_,_);}'
+weggli '{$ret=strlcat($buf,_,_);}'
+weggli '{$ret=wcslcpy($buf,_,_);}'
+weggli '{$ret=wcslcat($buf,_,_);}'
 ```
 
 ### direct write into buffer allocated on the stack
