@@ -14,9 +14,9 @@ A collection of my weggli patterns to facilitate vulnerability research.
 
 See also:  
 https://github.com/weggli-rs/weggli  
-https://dustri.org/b/playing-with-weggli.html
-https://github.com/plowsec/weggli-patterns
-https://github.com/synacktiv/Weggli_rules_SSTIC2023
+https://dustri.org/b/playing-with-weggli.html  
+https://github.com/plowsec/weggli-patterns  
+https://github.com/synacktiv/Weggli_rules_SSTIC2023  
 https://twitter.com/richinseattle/status/1729654184633327720  
 
 ## buffer overflows
