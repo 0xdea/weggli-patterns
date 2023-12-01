@@ -20,8 +20,8 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ### lack of explicit NUL-termination after strncpy() and stpncpy()
 ```
-$ weggli --cpp '{strncpy($buf,_); not: $buf[_]=_;}' . -e c
-$ weggli --cpp '{stpncpy($buf,_); not: $buf[_]=_;}' . -e c
+$ weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
+$ weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 ```
 
 ## integer overflows
@@ -38,8 +38,8 @@ $ weggli --cpp '{stpncpy($buf,_); not: $buf[_]=_;}' . -e c
 
 ### unchecked return code of setuid() and seteuid()
 ```
-$ weggli --cpp '{strict: setuid(_);}' . -e c
-$ weggli --cpp '{strict: seteuid(_);}' . -e c
+$ weggli '{strict: setuid(_);}' .
+$ weggli '{strict: seteuid(_);}' .
 ```
 
 ## miscellaneous
