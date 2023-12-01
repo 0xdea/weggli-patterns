@@ -26,6 +26,11 @@ $ weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 
 ## integer overflows
 
+### casting the return value of strlen() to short
+```
+weggli '{short $len; $len=strlen(_);}' .
+```
+
 ## format strings
 
 ## memory management
