@@ -30,6 +30,11 @@ weggli '{$ret=snprintf($buf,_,_);}'
 weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
 ```
 
+### direct write into buffer allocated on the stack
+```
+weggli '{_ $buf[]; strncpy($buf,_,_);}' .
+```
+
 ## integer overflows
 
 ### casting the return value of strlen() to short
