@@ -24,6 +24,12 @@ weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
 weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 ```
 
+### potentially unsafe use of the return value of snprintf() and vsnprintf()
+```
+weggli '{$ret=snprintf($buf,_,_);}'
+weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
+```
+
 ## integer overflows
 
 ### casting the return value of strlen() to short
