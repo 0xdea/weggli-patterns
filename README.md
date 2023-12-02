@@ -59,8 +59,7 @@ weggli '_ $func(_* $p) {sizeof($p);}'
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
-weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
-weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
+weggli -R 'func=ncpy' '{$func($buf,_); not: $buf[_]=_;}' .
 
 # some variants
 # read(), readlink(), fread(), memcpy(), etc.
