@@ -151,8 +151,7 @@ TBD
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
-weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
-weggli '{_ $p[]; not: $p =_; not: $func1(&$p); $func2($p);}' .
+weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
 ```
 
 ## command injection
