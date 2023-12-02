@@ -30,7 +30,7 @@ weggli -R 'func=sprintf$' '{$func(_);}' .
 weggli -R 'func=scanf$' '{$func(_);}' .
 ```
 
-### insecure use of strncat
+### incorrect use of strncat
 ```
 weggli '{strncat(_,_,sizeof(_));}' .
 weggli '{strncat(_,_,strlen(_));}' .
