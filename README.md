@@ -61,8 +61,7 @@ weggli '_ $func(_* $p) {sizeof($p);}'
 ```
 weggli -R 'func=ncpy' '{$func($buf,_); not: $buf[_]=_;}' .
 
-# some variants
-# read(), readlink(), fread(), memcpy(), etc.
+# some variants: memcpy, read, readlink, fread, etc.
 ```
 
 ### off-by-one error (CWE-193)
@@ -81,12 +80,9 @@ weggli -R 'func=(nprintf|lcpy|lcat)' '{$ret=$func(_);}' .
 ### direct write into buffer allocated on the stack (CWE-121)
 ```
 weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf,_);}' .
+weggli '{_ $buf[_]; $buf[_]=_;}' .
 
-# some variants
-# bcopy
-# gets, fgets, getwd, getcwd, fread
-# read, pread, recv, recvfrom
-# simple assignment
+# some variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom
 ```
 
 ## integer overflows
@@ -108,11 +104,7 @@ TBD
 weggli '{short _;}' .
 weggli '{int _;}' .
 
-# some variants
-# short int
-# unsigned short
-# unsigned short int
-# int
+# some variants: short int, unsigned short, unsigned short int, int
 ```
 
 ### casting the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
@@ -120,10 +112,7 @@ weggli '{int _;}' .
 weggli '{short $len; $len=strlen(_);}' .
 weggli '{short $len; $len=wcslen(_);}' .
 
-# some variants
-# short int
-# unsigned short
-# unsigned short int
+# some variants: short int, unsigned short, unsigned short int
 ```
 
 ### integer wraparound (CWE-128, CWE-131, CWE-190)
@@ -138,11 +127,7 @@ weggli -R 'func=printf$' '{$func(_);}' .
 weggli -R 'func=scanf$' '{$func(_);}' .
 weggli -R 'func=syslog$' '{$func(_);}' .
 
-# some variants
-# printk
-# warn, vwarn, warnx, vwarnx
-# err, verr, errx, verrx, warnc, vwarnc
-# errc, verrc
+# some variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc
 ```
 
 ## memory management
