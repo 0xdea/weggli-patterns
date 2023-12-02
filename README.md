@@ -21,6 +21,15 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ## buffer overflows
 
+### call to insecure API functions
+```
+weggli -R 'func=^get' '{$func(_);}' .
+weggli -R 'func=^st(r|p)(cpy|cat)' '{$func(_);}' .
+weggli -R 'func=^wc(s|p)(cpy|cat)' '{$func(_);}' .
+weggli -R 'func=sprintf$' '{$func(_);}' .
+weggli -R 'func=scanf$' '{$func(_);}' .
+```
+
 ### lack of explicit NUL-termination after strncpy(), etc.
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
