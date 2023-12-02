@@ -80,7 +80,7 @@ weggli -R 'func=(nprintf|lcpy|lcat)' '{$ret=$func(_);}' .
 
 ### direct write into buffer allocated on the stack (CWE-121)
 ```
-weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf,_,_);}' .
+weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf);}' .
 
 # some variants
 # bcopy
