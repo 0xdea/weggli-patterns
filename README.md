@@ -65,17 +65,17 @@ weggli -R 'func=ncpy' '{$func($buf,_); not: $buf[_]=_;}' .
 # read(), readlink(), fread(), memcpy(), etc.
 ```
 
+### off-by-one error (CWE-193)
+
+TBD
+
+### use of pointer subtraction to determine size (CWE-469)
+
+TBD
+
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
 ```
-weggli '{$ret=snprintf($buf,_,_);}'
-weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
-
-# some variants
-weggli '{$ret=vsnprintf($buf,_,_);}'
-weggli '{$ret=strlcpy($buf,_,_);}'
-weggli '{$ret=strlcat($buf,_,_);}'
-weggli '{$ret=wcslcpy($buf,_,_);}'
-weggli '{$ret=wcslcat($buf,_,_);}'
+weggli -R 'func=(nprintf|lcpy|lcat)' '{$ret=$func(_);}' .
 ```
 
 ### direct write into buffer allocated on the stack (CWE-121)
