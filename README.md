@@ -36,8 +36,9 @@ weggli '{strncat(_,_,sizeof(_));}' .
 weggli '{strncat(_,_,strlen(_));}' .
 weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 
-# current limitation of the query language
-https://github.com/weggli-rs/weggli/issues/59
+# this won't work due to current limitations in the query language
+# weggli '{_ $buf[$len]; strncat($buf,_,$len);}'
+# https://github.com/weggli-rs/weggli/issues/59
 ```
 
 ### lack of explicit NUL-termination after strncpy(), etc.
