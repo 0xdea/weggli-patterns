@@ -30,6 +30,16 @@ weggli -R 'func=sprintf$' '{$func(_);}' .
 weggli -R 'func=scanf$' '{$func(_);}' .
 ```
 
+### insecure use of strncat
+```
+weggli '{strncat(_,_,sizeof(_));}' .
+weggli '{strncat(_,_,strlen(_));}' .
+weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
+
+# current limitation of the query language
+https://github.com/weggli-rs/weggli/issues/59
+```
+
 ### lack of explicit NUL-termination after strncpy(), etc.
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
