@@ -21,7 +21,7 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ## buffer overflows
 
-### call to insecure API functions
+### call to insecure API functions (CWE-120, CWE-242, CWE-676)
 ```
 weggli -R 'func=^get' '{$func(_);}' .
 weggli -R 'func=^st(r|p)(cpy|cat)' '{$func(_);}' .
@@ -30,7 +30,7 @@ weggli -R 'func=sprintf$' '{$func(_);}' .
 weggli -R 'func=scanf$' '{$func(_);}' .
 ```
 
-### incorrect use of strncat
+### incorrect use of strncat (CWE-193, CWE-787)
 ```
 weggli '{strncat(_,_,sizeof(_));}' .
 weggli '{strncat(_,_,strlen(_));}' .
@@ -41,11 +41,11 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
-### destination buffer access using size of source buffer
+### destination buffer access using size of source buffer (CWE-806)
 
 TBD
 
-### lack of explicit NUL-termination after strncpy(), etc.
+### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
 weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
@@ -54,7 +54,7 @@ weggli '{stpncpy($buf,_); not: $buf[_]=_;}' .
 # read(), readlink(), fread(), memcpy(), etc.
 ```
 
-### potentially unsafe use of the return value of snprintf(), etc.
+### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
 ```
 weggli '{$ret=snprintf($buf,_,_);}'
 weggli '{$ret=snprintf($buf,_,_); $buf[$ret]=_;}'
@@ -67,7 +67,7 @@ weggli '{$ret=wcslcpy($buf,_,_);}'
 weggli '{$ret=wcslcat($buf,_,_);}'
 ```
 
-### direct write into buffer allocated on the stack
+### direct write into buffer allocated on the stack (CWE-121)
 ```
 weggli '{_ $buf[]; strncpy($buf,_,_);}' .
 weggli -R 'func=^mem' '{_ $buf[_]; $func($buf,_,_);}' .
@@ -86,7 +86,7 @@ weggli -R 'func=^mem' '{_ $buf[_]; $func($buf,_,_);}' .
 
 ## integer overflows
 
-### signed or short sizes, lengths, offsets, counts
+### signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
 weggli '{short _;}' .
 weggli '{int _;}' .
@@ -98,7 +98,7 @@ weggli '{int _;}' .
 # int
 ```
 
-### casting the return value of strlen(), wcslen() to short
+### casting the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
 ```
 weggli '{short $len; $len=strlen(_);}' .
 weggli '{short $len; $len=wcslen(_);}' .
@@ -111,7 +111,7 @@ weggli '{short $len; $len=wcslen(_);}' .
 
 ## format strings
 
-### find printf(), scanf(), syslog() family functions
+### find printf(), scanf(), syslog() family functions (CWE-134)
 ```
 weggli -R 'func=printf$' '{$func(_);}' .
 weggli -R 'func=scanf$' '{$func(_);}' .
@@ -126,7 +126,7 @@ weggli -R 'func=syslog$' '{$func(_);}' .
 
 ## memory management
 
-### use of uninitialized variables
+### use of uninitialized variables (CWE-457, CWE-824, CWE-908)
 ```
 weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
 weggli '{_ $p[]; not: $p =_; not: $func1(&$p); $func2($p);}' .
@@ -142,7 +142,7 @@ TBD
 
 ## privilege management
 
-### unchecked return code of setuid() and seteuid()
+### unchecked return code of setuid() and seteuid() (CWE-252)
 ```
 weggli '{strict: setuid(_);}' .
 weggli '{strict: seteuid(_);}' .
