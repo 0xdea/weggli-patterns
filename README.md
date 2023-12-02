@@ -50,6 +50,13 @@ weggli -R 'func=cpy' '{$func(_,$src,_($src));}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
+### use of sizeof() on a pointer type (CWE-467)
+```
+weggli '{_* $p; sizeof($p);}' .
+weggli '{_* $p = _; sizeof($p);}' .
+weggli '_ $func(_* $p) {sizeof($p);}'
+```
+
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
@@ -131,7 +138,7 @@ weggli -R 'func=syslog$' '{$func(_);}' .
 
 ## memory management
 
-### use of uninitialized variables (CWE-457, CWE-824, CWE-908)
+### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
 weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
 weggli '{_ $p[]; not: $p =_; not: $func1(&$p); $func2($p);}' .
