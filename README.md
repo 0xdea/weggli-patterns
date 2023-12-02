@@ -37,13 +37,18 @@ weggli '{strncat(_,_,strlen(_));}' .
 weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 
 # this won't work due to current limitations in the query language
-# weggli '{_ $buf[$len]; strncat($buf,_,$len);}'
+# weggli '{_ $buf[$len]; strncat($buf,_,$len);}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
 ### destination buffer access using size of source buffer (CWE-806)
+```
+weggli -R 'func=cpy' '{$func(_,$src,_($src));}' .
 
-TBD
+# this won't work due to current limitations in the query language
+# weggli -R 'func=cpy' '{_ $src[$len]; $func($dst,$src,$len);}' .
+# https://github.com/weggli-rs/weggli/issues/59
+```
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
