@@ -41,6 +41,10 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
+### destination buffer access using size of source buffer
+
+TBD
+
 ### lack of explicit NUL-termination after strncpy(), etc.
 ```
 weggli '{strncpy($buf,_); not: $buf[_]=_;}' .
