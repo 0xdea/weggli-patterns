@@ -91,6 +91,18 @@ weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf);}' 
 
 ## integer overflows
 
+### incorrect unsigned comparison (CWE-697)
+
+TBD
+
+### signed/unsigned conversion (CWE-195, CWE-196)
+
+TBD
+
+### integer truncation (CWE-197)
+
+TBD
+
 ### signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
 weggli '{short _;}' .
@@ -114,6 +126,10 @@ weggli '{short $len; $len=wcslen(_);}' .
 # unsigned short int
 ```
 
+### integer wraparound (CWE-128, CWE-131, CWE-190)
+
+TBD
+
 ## format strings
 
 ### find printf(), scanf(), syslog() family functions (CWE-134)
@@ -131,6 +147,8 @@ weggli -R 'func=syslog$' '{$func(_);}' .
 
 ## memory management
 
+TBD
+
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
 weggli '{_* $p; not: $p =_; not: $func1(&$p); $func2($p);}' .
@@ -147,6 +165,8 @@ TBD
 
 ## privilege management
 
+TBD
+
 ### unchecked return code of setuid() and seteuid() (CWE-252)
 ```
 weggli '{strict: setuid(_);}' .
@@ -154,6 +174,8 @@ weggli '{strict: seteuid(_);}' .
 ```
 
 ## miscellaneous
+
+TBD
 
 ### command-line argument or environment variable access
 ```
