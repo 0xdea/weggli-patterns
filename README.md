@@ -79,9 +79,11 @@ weggli '{malloc(strlen($buf));}' .
 ### use of pointer subtraction to determine size (CWE-469)
 ```
 weggli '{_* $p1; $p1-$p2;}' .
-weggli '{_* $p1; $p2-$p1;}' .
+weggli '{_* $p2; $p1-$p2;}' .
+weggli '{_* $p1=_; $p1-$p2;}' .
+weggli '{_* $p2=_; $p1-$p2;}' .
 weggli '_ $func(_* $p1) {$p1-$p2;}' .
-weggli '_ $func(_* $p1) {$p2-$p1;}' .
+weggli '_ $func(_* $p2) {$p1-$p2;}' .
 ```
 
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
