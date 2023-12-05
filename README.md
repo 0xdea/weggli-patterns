@@ -43,10 +43,10 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 
 ### destination buffer access using size of source buffer (CWE-806)
 ```
-weggli -R 'func=(cpy|sn?printf)' '{$func(_,$src,_($src));}' .
+weggli -R 'func=cpy' '{$func(_,$src,_($src));}' .
 
 # this won't work due to current limitations in the query language
-# weggli -R 'func=(cpy|sn?printf)' '{_ $src[$len]; $func($dst,$src,$len);}' .
+# weggli -R 'func=cpy' '{_ $src[$len]; $func($dst,$src,$len);}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
@@ -106,11 +106,36 @@ weggli '{_ $buf[_]; $buf[_]=_;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var; $var<0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var; $var<=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var; $var>=0;}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<0;}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<=0;}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var>=0;}' .
 ```
 
 ### signed/unsigned conversion (CWE-195, CWE-196)
+```
+weggli -R '$copy=(cpy|ncat)' '{int $len; $copy(_,_,$len);}' .
+weggli -R '$copy=(cpy|ncat)' '{int $len=_; $copy(_,_,$len);}' .
+weggli -R '$copy=(cpy|ncat)' '_ $func(int $len) {$copy(_,_,$len);}' .
 
-TBD
+weggli -R '$copy=nprintf' '{int $len; $copy(_,$len);}' .
+weggli -R '$copy=nprintf' '{int $len=_; $copy(_,$len);}' .
+weggli -R '$copy=nprintf' '_ $func(int $len) {$copy(_,$len);}' .
+
+weggli -R '$type=(unsigned|size_t)' '{$type $var1; int $var2; $var2=_($var1);}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var1; int $var2; $var1=_($var2);}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var1; int $var2=_($var1);}' .
+weggli -R '$type=(unsigned|size_t)' '{int $var1; $type $var2; $var2=_($var1);}' .
+weggli -R '$type=(unsigned|size_t)' '{int $var1; $type $var2; $var1=_($var2);}' .
+weggli -R '$type=(unsigned|size_t)' '{int $var1=_; $type $var2=_($var1);}' .
+
+weggli -R '$type=(unsigned|size_t)' '_ $func(int $var2) {$type $var1; $var1=_($var2);}' .
+weggli -R '$type=(unsigned|size_t)' '_ $func(int $var2) {$type $var1=_($var2);}' .
+
+weggli -R '$type=(unsigned|size_t)' '$type $func(_) {int $var; return $var;}' .
+weggli -R '$type=(unsigned|size_t)' 'int $func(_) {$type $var; return $var;}' .
+
+# there are many possible variants...
+```
 
 ### integer truncation (CWE-197)
 
@@ -126,8 +151,7 @@ weggli '{int _;}' .
 
 ### casting the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
 ```
-weggli '{short $len; $len=strlen(_);}' .
-weggli '{short $len; $len=wcslen(_);}' .
+weggli -R 'func=(str|wcs)len' '{short $len; $len=$func(_);}' .
 
 # some variants: short int, unsigned short, unsigned short int
 ```
@@ -140,9 +164,7 @@ TBD
 
 ### find printf(), scanf(), syslog() family functions (CWE-134)
 ```
-weggli -R 'func=printf$' '{$func(_);}' .
-weggli -R 'func=scanf$' '{$func(_);}' .
-weggli -R 'func=syslog$' '{$func(_);}' .
+weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
 
 # some variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc
 ```
@@ -170,8 +192,7 @@ TBD
 
 ### unchecked return code of setuid() and seteuid() (CWE-252)
 ```
-weggli '{strict: setuid(_);}' .
-weggli '{strict: seteuid(_);}' .
+weggli -R 'func=sete?uid' '{strict: $func(_);}' .
 ```
 
 ## miscellaneous
@@ -180,6 +201,5 @@ TBD
 
 ### command-line argument or environment variable access
 ```
-weggli '{argv[_];}' .
-weggli '{envp[_];}' .
+weggli -R 'var=(argv|envp)' '{$var[_];}' .
 ```
