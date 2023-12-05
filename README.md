@@ -23,7 +23,7 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ### call to insecure API functions (CWE-120, CWE-242, CWE-676)
 ```
-weggli -R 'func=^get' '{$func(_);}' .
+weggli -R 'func=^gets' '{$func(_);}' .
 weggli -R 'func=^st(r|p)(cpy|cat)' '{$func(_);}' .
 weggli -R 'func=^wc(s|p)(cpy|cat)' '{$func(_);}' .
 weggli -R 'func=sprintf$' '{$func(_);}' .
@@ -54,7 +54,7 @@ weggli -R 'func=(cpy|sn?printf)' '{$func(_,$src,_($src));}' .
 ```
 weggli '{_* $p; sizeof($p);}' .
 weggli '{_* $p = _; sizeof($p);}' .
-weggli '_ $func(_* $p) {sizeof($p);}'
+weggli '_ $func(_* $p) {sizeof($p);}' .
 ```
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
