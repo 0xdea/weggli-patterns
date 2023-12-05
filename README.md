@@ -53,7 +53,7 @@ weggli -R 'func=(cpy|sn?printf)' '{$func(_,$src,_($src));}' .
 ### use of sizeof() on a pointer type (CWE-467)
 ```
 weggli '{_* $p; sizeof($p);}' .
-weggli '{_* $p = _; sizeof($p);}' .
+weggli '{_* $p=_; sizeof($p);}' .
 weggli '_ $func(_* $p) {sizeof($p);}' .
 ```
 
@@ -67,18 +67,22 @@ weggli -R 'func=ncpy' '{$func($buf,_); not: $buf[_]=_;}' .
 ### off-by-one error (CWE-193)
 ```
 weggli '{$buf[sizeof($buf)];}' .
-weggli '{_ $buf[$len]; $buf[$len] = _;}' .
-weggli '{strlen($src) > sizeof($dst);}' .
-weggli '{strlen($src) <= sizeof($dst);}' .
-weggli '{sizeof($dst) < strlen($src);}' .
-weggli '{sizeof($dst) >= strlen($src);}' .
-weggli '{$buf[strlen($buf) - 1];}' .
+weggli '{_ $buf[$len]; $buf[$len]=_;}' .
+weggli '{strlen($src)>sizeof($dst);}' .
+weggli '{strlen($src)<=sizeof($dst);}' .
+weggli '{sizeof($dst)<strlen($src);}' .
+weggli '{sizeof($dst)>=strlen($src);}' .
+weggli '{$buf[strlen($buf)-1];}' .
 weggli '{malloc(strlen($buf));}' .
 ```
 
 ### use of pointer subtraction to determine size (CWE-469)
-
-TBD
+```
+weggli '{_* $p1; $p1-$p2;}' .
+weggli '{_* $p1; $p2-$p1;}' .
+weggli '_ $func(_* $p1) {$p1-$p2;}' .
+weggli '_ $func(_* $p1) {$p2-$p1;}' .
+```
 
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
 ```
