@@ -96,14 +96,17 @@ weggli -R 'func=(nprintf|lcpy|lcat)' '{$ret=$func(_);}' .
 weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf,_);}' .
 weggli '{_ $buf[_]; $buf[_]=_;}' .
 
-# some variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom
+# some variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom, etc.
 ```
 
 ## integer overflows
 
 ### incorrect unsigned comparison (CWE-697)
-
-TBD
+```
+weggli -R '$type=(unsigned|size_t)' '{$type $var; $var<0;}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var; $var<=0;}' .
+weggli -R '$type=(unsigned|size_t)' '{$type $var; $var>=0;}' .
+```
 
 ### signed/unsigned conversion (CWE-195, CWE-196)
 
