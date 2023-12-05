@@ -43,10 +43,10 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 
 ### destination buffer access using size of source buffer (CWE-806)
 ```
-weggli -R 'func=cpy' '{$func(_,$src,_($src));}' .
+weggli -R 'func=(cpy|sn?printf)' '{$func(_,$src,_($src));}' .
 
 # this won't work due to current limitations in the query language
-# weggli -R 'func=cpy' '{_ $src[$len]; $func($dst,$src,$len);}' .
+# weggli -R 'func=(cpy|sn?printf)' '{_ $src[$len]; $func($dst,$src,$len);}' .
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
