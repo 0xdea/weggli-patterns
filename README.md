@@ -152,6 +152,8 @@ weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow; $narrow = $la
 weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow; $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow = $large; }' .
+
+# there are many possible variants...
 ```
 
 ### signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
