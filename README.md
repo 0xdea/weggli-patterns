@@ -138,8 +138,21 @@ weggli -R '$type=(unsigned|size_t)' 'int $func(_) {$type $var; return $var;}' .
 ```
 
 ### integer truncation (CWE-197)
+```
+weggli -R 'type=(short|int|long)' '{$type $large; char $narrow; $narrow = $large; }' .
+weggli -R 'type=(short|int|long)' '{$type $large; char $narrow = $large; }' .
+weggli -R 'type=(int|long)' '{$type $large; short $narrow; $narrow = $large; }' .
+weggli -R 'type=(int|long)' '{$type $large; short $narrow = $large; }' .
+weggli '{long $large; int $narrow; $narrow = $large; }' .
+weggli '{long $large; int $narrow = $large; }' .
 
-TBD
+weggli -R 'type=(short|int|long)' '_ $func($type $large) {char $narrow; $narrow = $large; }' .
+weggli -R 'type=(short|int|long)' '_ $func($type $large) {char $narrow = $large; }' .
+weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow; $narrow = $large; }' .
+weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow = $large; }' .
+weggli '_ $func(long $large) {int $narrow; $narrow = $large; }' .
+weggli '_ $func(long $large) {int $narrow = $large; }' .
+```
 
 ### signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
