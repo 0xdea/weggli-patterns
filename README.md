@@ -172,8 +172,19 @@ weggli -R 'func=(str|wcs)len' '{short $len; $len=$func(_);}' .
 ```
 
 ### integer wraparound (CWE-128, CWE-131, CWE-190)
+```
+weggli -R 'func=(v|m)alloc' '{$func(_*_);}' .
+weggli -R 'func=(v|m)alloc' '{$func(_+_);}' .
+weggli -R 'func=(v|m)alloc' '{$n=_*_; $func($n);}' .
+weggli -R 'func=(v|m)alloc' '{$n=_+_; $func($n);}' .
 
-TBD
+weggli -R 'func=(c|re|aligned_)allocf?' '{$func(_*_);}' .
+weggli -R 'func=(c|re|aligned_)allocf?' '{$func(_+_);}' .
+weggli -R 'func=(c|re|aligned_)allocf?' '{$n=_*_; $func($buf,$n);}' .
+weggli -R 'func=(c|re|aligned_)allocf?' '{$n=_+_; $func($buf,$n);}' .
+
+
+```
 
 ## format strings
 
