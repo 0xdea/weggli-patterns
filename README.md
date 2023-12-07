@@ -183,7 +183,23 @@ weggli -R 'func=(c|re|aligned_)allocf?' '{$func(_+_);}' .
 weggli -R 'func=(c|re|aligned_)allocf?' '{$n=_*_; $func($buf,$n);}' .
 weggli -R 'func=(c|re|aligned_)allocf?' '{$n=_+_; $func($buf,$n);}' .
 
+weggli '{$x>_||($x+$y)>_;}' .
+weggli '{$x>=_||($x+$y)>_;}' .
+weggli '{$x>_||($x+$y)>=_;}' .
+weggli '{$x>=_||($x+$y)>=_;}' .
+weggli '{$x<_&&($x+$y)<_;}' .
+weggli '{$x<=_&&($x+$y)<_;}' .
+weggli '{$x<_&&($x+$y)<=_;}' .
+weggli '{$x<=_&&($x+$y)<=_;}' .
 
+weggli '{$x>_||($x*$y)>_;}' .
+weggli '{$x>=_||($x*$y)>_;}' .
+weggli '{$x>_||($x*$y)>=_;}' .
+weggli '{$x>=_||($x*$y)>=_;}' .
+weggli '{$x<_&&($x*$y)<_;}' .
+weggli '{$x<=_&&($x*$y)<_;}' .
+weggli '{$x<_&&($x*$y)<=_;}' .
+weggli '{$x<=_&&($x*$y)<=_;}' .
 ```
 
 ## format strings
