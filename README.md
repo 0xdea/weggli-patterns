@@ -213,6 +213,41 @@ weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
 
 ## memory management
 
+### call to insecure API functions (CWE-676)
+```
+weggli -R 'func=^alloca' '{$func(_);}' .
+```
+
+### use after free (CWE-416)
+
+TBD
+
+### double free (CWE-415)
+
+TBD
+
+### calling free on memory not in heap (CWE-590)
+
+TBD
+
+### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
+
+TBD
+
+### return of the address of a stack-allocated variable (CWE-562)
+
+TBD
+
+### call to putenv() with a stack-allocated variable (CWE-686)
+
+TBD
+
+### exposure of underlying memory addresses (CWE-200, CWE-209, CWE-497)
+
+TBD
+
+### mismatched memory management routines (CWE-762)
+
 TBD
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
