@@ -286,12 +286,34 @@ TBD
 
 TBD
 
-### unchecked return code of setuid() and seteuid() (CWE-252)
+### unchecked return code of setuid(), seteuid() (CWE-252)
 ```
 weggli -R 'func=sete?uid' '{strict: $func(_);}' .
 ```
 
 ## miscellaneous
+
+### wrong order of arguments in call to memset() 
+
+TBD
+
+### call to rand(), srand() (CWE-330, CWE-338)
+
+TBD
+
+### source and destination overlap in sprintf(), snprintf()
+
+TBD
+
+### size check implemented with an assertion macro
+
+TBD
+
+### unchecked return code of scanf(), etc. (CWE-252)
+
+TBD
+
+### call to atoi(), atol(), atof(), atoll()
 
 TBD
 
@@ -299,3 +321,23 @@ TBD
 ```
 weggli -R 'var=(argv|envp)' '{$var[_];}' .
 ```
+
+### missing default case in a switch construct (CWE-478)
+
+TBD
+
+### missing break or equivalent statement in a switch construct (CWE-484)
+
+TBD
+
+### missing return statement in a non-void function (CWE-393, CWE-394)
+
+TBD
+
+### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483)
+
+TBD
+
+### keywords that suggest the presence of bugs
+
+TBD
