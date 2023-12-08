@@ -174,7 +174,7 @@ weggli -R 'func=(str|wcs)len' '{short $len; $len=$func(_);}' .
 # some variants: short int, unsigned short, unsigned short int
 ```
 
-### integer wraparound (CWE-128, CWE-131, CWE-190)
+### integer wraparound (CWE-128, CWE-131, CWE-190, CWE-680)
 ```
 weggli -R 'func=(v|m)alloc' '{$func(_*_);}' .
 weggli -R 'func=(v|m)alloc' '{$func(_+_);}' .
@@ -216,7 +216,7 @@ weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
 
 ## memory management
 
-### call to alloca() (CWE-1325, CWE-676)
+### call to alloca() (CWE-676, CWE-1325)
 ```
 weggli -R 'func=^alloca' '{$func(_);}' .
 ```
@@ -279,6 +279,10 @@ TBD
 TBD
 
 ## privilege management
+
+TBD
+
+### privilege management functions called in the wrong order (CWE-696)
 
 TBD
 
