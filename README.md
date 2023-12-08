@@ -207,7 +207,7 @@ weggli '{$x<=_&&($x*$y)<=_;}' .
 
 ## format strings
 
-### find printf(), scanf(), syslog() family functions (CWE-134)
+### call to printf(), scanf(), syslog() family functions (CWE-134)
 ```
 weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
 
@@ -216,7 +216,7 @@ weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
 
 ## memory management
 
-### call to insecure API functions (CWE-676)
+### call to alloca() (CWE-1325, CWE-676)
 ```
 weggli -R 'func=^alloca' '{$func(_);}' .
 ```
@@ -259,6 +259,8 @@ weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
 ```
 
 ## command injection
+
+### call to system(), popen() (CWE-78, CWE-88, CWE-676)
 
 TBD
 
