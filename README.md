@@ -24,7 +24,7 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ## buffer overflows
 
-### call to insecure API functions (CWE-120, CWE-242, CWE-676)
+### call to unbounded copy functions (CWE-120, CWE-242, CWE-676)
 ```
 weggli -R 'func=^gets' '{$func(_);}' .
 weggli -R 'func=^st(r|p)(cpy|cat)' '{$func(_);}' .
@@ -265,6 +265,16 @@ weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
 TBD
 
 ## race conditions
+
+### call to access(), stat(), lstat() (CWE-367)
+
+TBD
+
+### call to mktemp(), tmpnam(), tempnam() (CWE-377)
+
+TBD
+
+### call to signal() (CWE-364, CWE-479, CWE-828)
 
 TBD
 
