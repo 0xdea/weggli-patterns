@@ -159,7 +159,7 @@ weggli '_ $func(long $large) {int $narrow = $large; }' .
 # there are many possible variants...
 ```
 
-### signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
+### use of signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
 weggli '{short _;}' .
 weggli '{int _;}' .
@@ -167,7 +167,7 @@ weggli '{int _;}' .
 # some variants: short int, unsigned short, unsigned short int, int
 ```
 
-### casting the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
+### cast of the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
 ```
 weggli -R 'func=(str|wcs)len' '{short $len; $len=$func(_);}' .
 
@@ -229,7 +229,7 @@ TBD
 
 TBD
 
-### calling free on memory not in heap (CWE-590)
+### calling free() on memory not allocated in the heap (CWE-590)
 
 TBD
 
