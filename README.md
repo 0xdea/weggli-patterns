@@ -248,8 +248,9 @@ weggli '{_ *$var=_; free(&$var);}' .
 ```
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
-
-TBD
+```
+weggli -R 'func=(m|c|re)alloc' '{$ret=$func(_); not:if(_($ret)){};}' .
+```
 
 ### return of the address of a stack-allocated variable (CWE-562)
 
