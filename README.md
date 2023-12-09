@@ -308,12 +308,14 @@ weggli -R 'func=system|popen' '{$func(_);}' .
 ## race conditions
 
 ### call to access(), stat(), lstat() (CWE-367)
-
-TBD
+```
+weggli -R 'func=access|l?stat' '{$func(_);}' .
+```
 
 ### call to mktemp(), tmpnam(), tempnam() (CWE-377)
-
-TBD
+```
+weggli -R 'func=mktemp|te?mpnam' '{$func(_);}' .
+```
 
 ### call to signal() (CWE-364, CWE-479, CWE-828)
 
