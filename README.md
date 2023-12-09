@@ -252,9 +252,21 @@ weggli '{_ *$var=_; free(&$var);}' .
 weggli -R 'func=(m|c|re)alloc' '{$ret=$func(_); not:if(_($ret)){};}' .
 ```
 
-### return of the address of a stack-allocated variable (CWE-562)
+### returning the address of a stack-allocated variable (CWE-562)
+```
+weggli '{_ $ptr[]; return $ptr;}' .
+weggli '{_ $ptr[]=_; return $ptr;}' .
 
-TBD
+weggli '{_ $ptr[]; $ptr2=$ptr; return $ptr2;}' .
+weggli '{_ $ptr[]=_; $ptr2=$ptr; return $ptr2;}' .
+
+weggli '{_ $var; return &$var;}' .
+weggli '{_ $var=_; return &$var;}' .
+weggli '{_ $var[]; return &$var;}' .
+weggli '{_ $var[]=_; return &$var;}' .
+weggli '{_ *$var; return &$var;}' .
+weggli '{_ *$var=_; return &$var;}' .
+```
 
 ### call to putenv() with a stack-allocated variable (CWE-686)
 
