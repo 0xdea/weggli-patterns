@@ -318,8 +318,9 @@ weggli -R 'func=mktemp|te?mpnam' '{$func(_);}' .
 ```
 
 ### call to signal() (CWE-364, CWE-479, CWE-828)
-
-TBD
+```
+weggli -R 'func=signal' '{$func(_);}' .
+```
 
 ## privilege management
 
