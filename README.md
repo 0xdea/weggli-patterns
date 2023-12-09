@@ -324,8 +324,6 @@ weggli -R 'func=signal' '{$func(_);}' .
 
 ## privilege management
 
-TBD
-
 ### privilege management functions called in the wrong order (CWE-696)
 
 TBD
