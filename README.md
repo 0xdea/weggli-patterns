@@ -227,8 +227,9 @@ weggli '{free($ptr); not:$ptr=_; not:free($ptr); _($ptr);}' use-after-free.c
 ```
 
 ### double free (CWE-415)
-
-TBD
+```
+weggli '{free($ptr); not:$ptr=_; free($ptr);}' .
+```
 
 ### calling free() on memory not allocated in the heap (CWE-590)
 
