@@ -222,8 +222,9 @@ weggli -R 'func=^alloca' '{$func(_);}' .
 ```
 
 ### use after free (CWE-416)
-
-TBD
+```
+weggli '{free($ptr); not:$ptr=_; not:free($ptr); _($ptr);}' use-after-free.c
+```
 
 ### double free (CWE-415)
 
