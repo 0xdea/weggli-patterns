@@ -283,8 +283,15 @@ weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt"
 ```
 
 ### mismatched memory management routines (CWE-762)
+```
+weggli -R 'func=(m|c|re)alloc|strdn?up' '{not:$ptr=$func(); free($ptr);}' .
 
-TBD
+weggli --cpp -R 'func=(m|c|re)alloc|strn?dup' '{not:$ptr=$func(); free($ptr);}' .
+weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
+
+# apparently, delete[] is not supported so this won't work properly
+# weggli --cpp '{not:$ptr=new $obj[$len]; delete[] $ptr;}' .
+```
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
