@@ -232,8 +232,20 @@ weggli '{free($ptr); not:$ptr=_; free($ptr);}' .
 ```
 
 ### calling free() on memory not allocated in the heap (CWE-590)
+```
+weggli '{_ $ptr[]; free($ptr);}' .
+weggli '{_ $ptr[]=_; free($ptr);}' .
 
-TBD
+weggli '{_ $ptr[]; $ptr2=$ptr; free($ptr2);}' .
+weggli '{_ $ptr[]=_; $ptr2=$ptr; free($ptr2);}' .
+
+weggli '{_ $var; free(&$var);}' .
+weggli '{_ $var=_; free(&$var);}' .
+weggli '{_ $var[]; free(&$var);}' .
+weggli '{_ $var[]=_; free(&$var);}' .
+weggli '{_ *$var; free(&$var);}' .
+weggli '{_ *$var=_; free(&$var);}' .
+```
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
 
