@@ -269,8 +269,13 @@ weggli '{_ *$var=_; return &$var;}' .
 ```
 
 ### call to putenv() with a stack-allocated variable (CWE-686)
+```
+weggli '{_ $ptr[]; putenv($ptr);}' .
+weggli '{_ $ptr[]=_; putenv($ptr);}' .
 
-TBD
+weggli '{_ $ptr[]; $ptr2=$ptr; putenv($ptr2);}' .
+weggli '{_ $ptr[]=_; $ptr2=$ptr; putenv($ptr2);}' .
+```
 
 ### exposure of underlying memory addresses (CWE-200, CWE-209, CWE-497)
 
