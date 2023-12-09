@@ -278,8 +278,9 @@ weggli '{_ $ptr[]=_; $ptr2=$ptr; putenv($ptr2);}' .
 ```
 
 ### exposure of underlying memory addresses (CWE-200, CWE-209, CWE-497)
-
-TBD
+```
+weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt");}' .
+```
 
 ### mismatched memory management routines (CWE-762)
 
