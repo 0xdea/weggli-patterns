@@ -91,12 +91,12 @@ weggli '_ $func(_* $p2) {$p1-$p2;}' .
 
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
 ```
-weggli -R 'func=(nprintf|lcpy|lcat)' '{$ret=$func(_);}' .
+weggli -R 'func=nprintf|lcpy|lcat' '{$ret=$func(_);}' .
 ```
 
 ### direct write into buffer allocated on the stack (CWE-121)
 ```
-weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)' '{_ $buf[_]; $func($buf,_);}' .
+weggli -R 'func=cpy|cat|memmove|memset|sn?printf' '{_ $buf[_]; $func($buf,_);}' .
 weggli '{_ $buf[_]; $buf[_]=_;}' .
 
 # some variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom, etc.
@@ -209,7 +209,7 @@ weggli '{$x<=_&&($x*$y)<=_;}' .
 
 ### call to printf(), scanf(), syslog() family functions (CWE-134)
 ```
-weggli -R 'func=(printf$|scanf$|syslog$)' '{$func(_);}' .
+weggli -R 'func=printf$|scanf$|syslog$' '{$func(_);}' .
 
 # some variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc
 ```
@@ -301,8 +301,9 @@ weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
 ## command injection
 
 ### call to system(), popen() (CWE-78, CWE-88, CWE-676)
-
-TBD
+```
+weggli -R 'func=system|popen' '{$func(_);}' .
+```
 
 ## race conditions
 
