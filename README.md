@@ -26,11 +26,11 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ### call to unbounded copy functions (CWE-120, CWE-242, CWE-676)
 ```
-weggli -R 'func=^gets' '{$func(_);}' .
-weggli -R 'func=^st(r|p)(cpy|cat)' '{$func(_);}' .
-weggli -R 'func=^wc(s|p)(cpy|cat)' '{$func(_);}' .
-weggli -R 'func=sprintf$' '{$func(_);}' .
-weggli -R 'func=scanf$' '{$func(_);}' .
+weggli -R 'func=^gets' '{$func();}' .
+weggli -R 'func=^st(r|p)(cpy|cat)' '{$func();}' .
+weggli -R 'func=^wc(s|p)(cpy|cat)' '{$func();}' .
+weggli -R 'func=sprintf$' '{$func();}' .
+weggli -R 'func=scanf$' '{$func();}' .
 ```
 
 ### incorrect use of strncat (CWE-193, CWE-787)
@@ -91,7 +91,7 @@ weggli '_ $func(_* $p2) {$p1-$p2;}' .
 
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
 ```
-weggli -R 'func=nprintf|lcpy|lcat' '{$ret=$func(_);}' .
+weggli -R 'func=nprintf|lcpy|lcat' '{$ret=$func();}' .
 ```
 
 ### direct write into buffer allocated on the stack (CWE-121)
@@ -169,7 +169,7 @@ weggli '{int _;}' .
 
 ### cast of the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
 ```
-weggli -R 'func=(str|wcs)len' '{short $len; $len=$func(_);}' .
+weggli -R 'func=(str|wcs)len' '{short $len; $len=$func();}' .
 
 # some variants: short int, unsigned short, unsigned short int
 ```
@@ -209,7 +209,7 @@ weggli '{$x<=_&&($x*$y)<=_;}' .
 
 ### call to printf(), scanf(), syslog() family functions (CWE-134)
 ```
-weggli -R 'func=printf$|scanf$|syslog$' '{$func(_);}' .
+weggli -R 'func=printf$|scanf$|syslog$' '{$func();}' .
 
 # some variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc
 ```
@@ -218,7 +218,7 @@ weggli -R 'func=printf$|scanf$|syslog$' '{$func(_);}' .
 
 ### call to alloca() (CWE-676, CWE-1325)
 ```
-weggli -R 'func=^alloca' '{$func(_);}' .
+weggli -R 'func=^alloca' '{$func();}' .
 ```
 
 ### use after free (CWE-416)
@@ -249,7 +249,7 @@ weggli '{_ *$var=_; free(&$var);}' .
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
 ```
-weggli -R 'func=(m|c|re)alloc' '{$ret=$func(_); not:if(_($ret)){};}' .
+weggli -R 'func=(m|c|re)alloc' '{$ret=$func(); not:if(_($ret)){};}' .
 ```
 
 ### returning the address of a stack-allocated variable (CWE-562)
@@ -302,24 +302,24 @@ weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
 
 ### call to system(), popen() (CWE-78, CWE-88, CWE-676)
 ```
-weggli -R 'func=system|popen' '{$func(_);}' .
+weggli -R 'func=system|popen' '{$func();}' .
 ```
 
 ## race conditions
 
 ### call to access(), stat(), lstat() (CWE-367)
 ```
-weggli -R 'func=access|l?stat' '{$func(_);}' .
+weggli -R 'func=access|l?stat' '{$func();}' .
 ```
 
 ### call to mktemp(), tmpnam(), tempnam() (CWE-377)
 ```
-weggli -R 'func=mktemp|te?mpnam' '{$func(_);}' .
+weggli -R 'func=mktemp|te?mpnam' '{$func();}' .
 ```
 
 ### call to signal() (CWE-364, CWE-479, CWE-828)
 ```
-weggli -R 'func=signal' '{$func(_);}' .
+weggli -R 'func=signal' '{$func();}' .
 ```
 
 ## privilege management
@@ -334,7 +334,7 @@ weggli '{not:seteuid(0); seteuid(); not:seteuid(0); seteuid();}' .
 
 ### unchecked return code of setuid(), seteuid() (CWE-252)
 ```
-weggli -R 'func=sete?uid' '{strict: $func(_);}' .
+weggli -R 'func=sete?uid' '{strict: $func();}' .
 ```
 
 ## miscellaneous
