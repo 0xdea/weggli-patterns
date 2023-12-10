@@ -325,8 +325,12 @@ weggli -R 'func=signal' '{$func(_);}' .
 ## privilege management
 
 ### privilege management functions called in the wrong order (CWE-696)
-
-TBD
+```
+weggli '{not:setuid(0); setuid(); setgid();}' .
+weggli '{not:seteuid(0); seteuid(); not:seteuid(0); setegid();}' .
+weggli '{not:seteuid(0); seteuid(); not:seteuid(0); setuid();}' .
+weggli '{not:seteuid(0); seteuid(); not:seteuid(0); seteuid();}' .
+```
 
 ### unchecked return code of setuid(), seteuid() (CWE-252)
 ```
