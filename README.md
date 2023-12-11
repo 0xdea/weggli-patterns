@@ -380,8 +380,9 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 ```
 
 ### unchecked return code of scanf(), etc. (CWE-252)
-
-TBD
+```
+weggli -R 'func=scanf$' '{strict: $func();}' .
+```
 
 ### call to atoi(), atol(), atof(), atoll()
 
