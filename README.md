@@ -340,8 +340,10 @@ weggli -R 'func=sete?uid' '{strict: $func();}' .
 ## miscellaneous
 
 ### wrong order of arguments in call to memset() 
-
-TBD
+```
+weggli -R 'func=memset(_explicit)?' '{$func(_,_,0);}' .
+weggli -R 'func=memset(_explicit)?' '{$func(_,sizeof(_),_);}' .
+```
 
 ### call to rand(), srand() (CWE-330, CWE-338)
 
