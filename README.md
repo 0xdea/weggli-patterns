@@ -77,6 +77,9 @@ weggli '{sizeof($dst)<strlen($src);}' .
 weggli '{sizeof($dst)>=strlen($src);}' .
 weggli '{$buf[strlen($buf)-1];}' .
 weggli '{malloc(strlen($buf));}' .
+
+# < should also cover > as <= should also cover >= 
+# however, keep all cases just to be sure
 ```
 
 ### use of pointer subtraction to determine size (CWE-469)
@@ -112,6 +115,9 @@ weggli -R '$type=(unsigned|size_t)' '{$type $var; $var>=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var>=0;}' .
+
+# < should also cover > as <= should also cover >= 
+# however, keep all cases just to be sure
 ```
 
 ### signed/unsigned conversion (CWE-195, CWE-196)
@@ -203,6 +209,9 @@ weggli '{$x<_&&($x*$y)<_;}' .
 weggli '{$x<=_&&($x*$y)<_;}' .
 weggli '{$x<_&&($x*$y)<=_;}' .
 weggli '{$x<=_&&($x*$y)<=_;}' .
+
+# < should also cover > as <= should also cover >= 
+# however, keep all cases just to be sure
 ```
 
 ## format strings
@@ -360,8 +369,15 @@ weggli -R 'func=sn?printf$' '{$func($dst,_,_,_,$dst);}' .
 ```
 
 ### size check implemented with an assertion macro
+```
+weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<_);}' .
+weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<=_);}' .
+weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>_);}' .
+weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 
-TBD
+# < should also cover > as <= should also cover >= 
+# however, keep all cases just to be sure
+```
 
 ### unchecked return code of scanf(), etc. (CWE-252)
 
