@@ -402,8 +402,11 @@ weggli -l '{not: default:_; case _:_; not: default:_;}' .
 ```
 
 ### missing break or equivalent statement in a switch construct (CWE-484)
+```
+weggli -l '{case _: not: break; not: exit; not: return; not: goto _; case _:_;}' .
 
-TBD
+# -l might be overkill and lead to missing additional instances in the same function
+```
 
 ### missing return statement in a non-void function (CWE-393, CWE-394)
 
