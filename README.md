@@ -62,7 +62,7 @@ weggli '_ $func(_* $p) {sizeof($p);}' .
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
-weggli -R 'func=ncpy$' '{$func($buf,_); not: $buf[_]=_;}' .
+weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
 
 # some variants: memcpy, read, readlink, fread, etc.
 ```
@@ -304,7 +304,7 @@ weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
-weggli '{_* $p; not: $p =_; not: $func(&$p); _($p);}' .
+weggli '{_* $p; not:$p =_; not:$func(&$p); _($p);}' .
 ```
 
 ## command injection
@@ -343,7 +343,7 @@ weggli '{not:seteuid(0); seteuid(); not:seteuid(0); seteuid();}' .
 
 ### unchecked return code of setuid(), seteuid() (CWE-252)
 ```
-weggli -R 'func=sete?uid$' '{strict: $func();}' .
+weggli -R 'func=sete?uid$' '{strict:$func();}' .
 ```
 
 ## miscellaneous
@@ -381,7 +381,7 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 
 ### unchecked return code of scanf(), etc. (CWE-252)
 ```
-weggli -R 'func=scanf$' '{strict: $func();}' .
+weggli -R 'func=scanf$' '{strict:$func();}' .
 ```
 
 ### call to atoi(), atol(), atof(), atoll()
@@ -396,21 +396,21 @@ weggli -R 'var=(argv|envp)' '{$var[_];}' .
 
 ### missing default case in a switch construct (CWE-478)
 ```
-weggli -l 'switch(_) {_; not: default:_; _;}' .
+weggli -l 'switch(_) {_; not:default:_; _;}' .
 
 # -l might be overkill and lead to missing additional matches in the same function
 ```
 
 ### missing break or equivalent statement in a switch construct (CWE-484)
 ```
-weggli -l 'switch(_) {case _: not: break; not: exit; not: return; not: goto _; case _:_;}' .
+weggli -l 'switch(_) {case _: not:break; not:exit; not:return; not:goto _; case _:_;}' .
 
 # -l might be overkill and lead to missing additional matches in the same function
 ```
 
 ### missing return statement in a non-void function (CWE-393, CWE-394)
 ```
-weggli -R 'type!=void' '$type $func(_) {_; not: return;}' .
+weggli -R 'type!=void' '$type $func(_) {_; not:return;}' .
 ```
 
 ### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483)
