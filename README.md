@@ -385,8 +385,9 @@ weggli -R 'func=scanf$' '{strict: $func();}' .
 ```
 
 ### call to atoi(), atol(), atof(), atoll()
-
-TBD
+```
+weggli -R 'func=ato(i|ll?|f)$' '{$func();}' .
+```
 
 ### command-line argument or environment variable access
 ```
