@@ -361,9 +361,9 @@ weggli -R 'func=s?rand$' '{$func();}'
 
 ### source and destination overlap in sprintf(), snprintf()
 ```
-weggli -R 'func=sn?printf$' '{$func($dst,_,$dst);}' .
-weggli -R 'func=sn?printf$' '{$func($dst,_,_,$dst);}' .
-weggli -R 'func=sn?printf$' '{$func($dst,_,_,_,$dst);}' .
+weggli -R 'func=^sn?printf$' '{$func($dst,_,$dst);}' .
+weggli -R 'func=^sn?printf$' '{$func($dst,_,_,$dst);}' .
+weggli -R 'func=^sn?printf$' '{$func($dst,_,_,_,$dst);}' .
 
 # and so on...
 ```
