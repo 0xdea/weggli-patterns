@@ -396,7 +396,7 @@ weggli -R 'var=(argv|envp)' '{$var[_];}' .
 
 ### missing default case in a switch construct (CWE-478)
 ```
-weggli -l '{switch(_) {not: default:_; case _:_; not: default:_;}}' .
+weggli -l '{not: default:_; case _:_; not: default:_;}' .
 
 # -l might be overkill and lead to missing additional instances in the same function
 ```
