@@ -396,21 +396,22 @@ weggli -R 'var=(argv|envp)' '{$var[_];}' .
 
 ### missing default case in a switch construct (CWE-478)
 ```
-weggli -l 'switch(_){_; not: default:_; _;}' .
+weggli -l 'switch(_) {_; not: default:_; _;}' .
 
 # -l might be overkill and lead to missing additional matches in the same function
 ```
 
 ### missing break or equivalent statement in a switch construct (CWE-484)
 ```
-weggli -l 'switch(_){case _: not: break; not: exit; not: return; not: goto _; case _:_;}' .
+weggli -l 'switch(_) {case _: not: break; not: exit; not: return; not: goto _; case _:_;}' .
 
 # -l might be overkill and lead to missing additional matches in the same function
 ```
 
 ### missing return statement in a non-void function (CWE-393, CWE-394)
-
-TBD
+```
+weggli -R 'type!=void' '$type $func(_) {_; not: return;}' .
+```
 
 ### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483)
 
