@@ -47,6 +47,7 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 ### destination buffer access using size of source buffer (CWE-806)
 ```
 weggli -R 'func=cpy$' '{$func(_,$src,_($src));}' .
+weggli -R 'func=cpy$' '{$len=_($src); $func(_,$src,$len);}' .
 
 # this won't work due to current limitations in the query language
 # weggli -R 'func=cpy$' '{_ $src[$len]; $func($dst,$src,$len);}' .
