@@ -167,8 +167,8 @@ weggli '_ $func(long $large) {int $narrow = $large; }' .
 
 ### use of signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
-weggli '{short _;}' .
-weggli '{int _;}' .
+weggli 'short _' .
+weggli 'int _' .
 
 # some variants: short int, unsigned short, unsigned short int, int
 ```
@@ -427,5 +427,11 @@ weggli -R 'func=strn?cpy$' 'if ($func()==_) {}' .
 ```
 
 ### keywords that suggest the presence of bugs
+```
+weggli -R 'pattern=(?i)(unsafe|insecure|dangerous|warning|overflow)' '$pattern' .
 
-TBD
+weggli -R 'func=(?i)(encode|decode|convert|interpret|compress|fragment|reassemble)' '_ $func(_) {}' .
+weggli -R 'func=(?i)(mutex|lock|toctou|parallelism|semaphore|retain|release|garbage|mutual)' '_ $func(_) {}' .
+
+# there are many possible additional patterns...
+```
