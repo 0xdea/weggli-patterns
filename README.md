@@ -77,7 +77,8 @@ weggli '{sizeof($dst)<strlen($src);}' .
 weggli '{sizeof($dst)>=strlen($src);}' .
 weggli '{$buf[strlen($buf)-1];}' .
 weggli '{malloc(strlen($buf));}' .
-weggli -u '{$len=snprintf(_); malloc($len);}' .
+weggli '{$len=strlen(_); $ptr=malloc($len);}' .
+weggli '{$len=snprintf(_); $ptr=malloc($len);}' .
 
 # < should also cover > as <= should also cover >= 
 # however, keep all cases just to be sure
@@ -256,7 +257,7 @@ weggli '{_ $var[]=_; free(&$var);}' .
 weggli '{_ *$var; free(&$var);}' .
 weggli '{_ *$var=_; free(&$var);}' .
 
-weggli -u '{$ptr=alloca(_); free($ptr);}' .
+weggli '{$ptr=alloca(_); free($ptr);}' .
 ```
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
