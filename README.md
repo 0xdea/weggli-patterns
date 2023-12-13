@@ -254,6 +254,8 @@ weggli '{_ $var[]; free(&$var);}' .
 weggli '{_ $var[]=_; free(&$var);}' .
 weggli '{_ *$var; free(&$var);}' .
 weggli '{_ *$var=_; free(&$var);}' .
+
+weggli -u '{$ptr = alloca(_); free($ptr);}'
 ```
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
