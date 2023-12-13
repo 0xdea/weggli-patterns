@@ -77,7 +77,7 @@ weggli '{sizeof($dst)<strlen($src);}' .
 weggli '{sizeof($dst)>=strlen($src);}' .
 weggli '{$buf[strlen($buf)-1];}' .
 weggli '{malloc(strlen($buf));}' .
-weggli -u '$len=snprintf(0,0,_); malloc($len);' .
+weggli -u '{$len=snprintf(0,0,_); malloc($len);}' .
 
 # < should also cover > as <= should also cover >= 
 # however, keep all cases just to be sure
