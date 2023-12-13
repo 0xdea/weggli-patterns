@@ -414,8 +414,17 @@ weggli -R 'type!=void' '$type $func(_) {_; not:return;}' .
 ```
 
 ### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483)
+```
+weggli '{for (_==_;_;_) {}}' .
+weggli '{if (_=_) {}}' .
+weggli '{if (_&_) {}}' .
+weggli '{if (_|_) {}}' .
+weggli '{_=+_;}' .
+weggli '{_=-_;}' .
+weggli -R 'func=strn?cpy$' '{if ($func()==_) {}}' .
 
-TBD
+# there are many possible additional patterns...
+```
 
 ### keywords that suggest the presence of bugs
 
