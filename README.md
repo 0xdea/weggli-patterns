@@ -26,7 +26,7 @@ https://twitter.com/richinseattle/status/1729654184633327720
 
 ### call to unbounded copy functions (CWE-120, CWE-242, CWE-676)
 ```
-weggli -R 'func=gets$' '{$func();}' .
+weggli -R 'func=^gets$' '{$func();}' .
 weggli -R 'func=st(r|p)(cpy|cat)$' '{$func();}' .
 weggli -R 'func=wc(s|p)(cpy|cat)$' '{$func();}' .
 weggli -R 'func=sprintf$' '{$func();}' .
@@ -56,9 +56,12 @@ weggli -R 'func=cpy$' '{$len=_($src); $func(_,$src,$len);}' .
 
 ### use of sizeof() on a pointer type (CWE-467)
 ```
-weggli '{_* $p; sizeof($p);}' .
-weggli '{_* $p=_; sizeof($p);}' .
-weggli '_ $func(_* $p) {sizeof($p);}' .
+weggli '{_* $ptr; sizeof($ptr);}' .
+weggli '{_* $ptr=_; sizeof($ptr);}' .
+weggli '_ $func(_* $ptr) {sizeof($ptr);}' .
+
+# apparently global variables are not supported so this won't work
+# weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
 ```
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
@@ -309,7 +312,7 @@ weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
-weggli '{_* $p; not:$p =_; not:$func(&$p); _($p);}' .
+weggli '{_* $ptr; not:$ptr=_; not:$func(&$ptr); _($ptr);}' .
 ```
 
 ## command injection
