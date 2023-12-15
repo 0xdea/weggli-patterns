@@ -267,11 +267,6 @@ weggli '{_ *$var=_; free(&$var);}' .
 weggli '{$ptr=alloca(_); free($ptr);}' .
 ```
 
-### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
-```
-weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
-```
-
 ### returning the address of a stack-allocated variable (CWE-562)
 ```
 weggli '{_ $ptr[]; return $ptr;}' .
@@ -286,6 +281,11 @@ weggli '{_ $var[]; return &$var;}' .
 weggli '{_ $var[]=_; return &$var;}' .
 weggli '{_ *$var; return &$var;}' .
 weggli '{_ *$var=_; return &$var;}' .
+```
+
+### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
+```
+weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
 ```
 
 ### call to putenv() with a stack-allocated variable (CWE-686)
@@ -323,6 +323,10 @@ weggli '{_* $ptr; not:$ptr=_; not:$func(&$ptr); _($ptr);}' .
 ### call to system(), popen() (CWE-78, CWE-88, CWE-676)
 ```
 weggli -R 'func=(system|popen)$' '{$func();}' .
+weggli -R 'func=(system|popen)$' '{$func($arg);}' .
+
+# the second pattern tries to filter out string literals,
+# but it might determine some false negatives
 ```
 
 ## race conditions
@@ -402,7 +406,7 @@ weggli -R 'func=ato(i|ll?|f)$' '{$func();}' .
 
 ### command-line argument or environment variable access
 ```
-weggli -R 'var=(argv|envp)' '{$var[_];}' .
+weggli -R 'var=argv|envp' '{$var[_];}' .
 ```
 
 ### missing default case in a switch construct (CWE-478)
