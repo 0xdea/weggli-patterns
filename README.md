@@ -196,8 +196,8 @@ weggli -R 'func=allocf?$' '{$func(_+_);}' .
 weggli -R 'func=allocf?$' '{$n=_*_; $func($n);}' .
 weggli -R 'func=allocf?$' '{$n=_+_; $func($n);}' .
 
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
+weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
+weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
 weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}'
 weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}'
 
