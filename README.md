@@ -38,9 +38,9 @@ weggli -R 'func=scanf$' '{$func();}' .
 weggli '{strncat(_,_,sizeof(_));}' .
 weggli '{strncat(_,_,strlen(_));}' .
 weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
+weggli '{_ $buf[$len]; strncat($buf,_,$len);}' .
 
-# this won't work due to current limitations in the query language
-# weggli '{_ $buf[$len]; strncat($buf,_,$len);}' .
+# the last pattern won't work with integer literals due to known limitations
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
@@ -48,9 +48,9 @@ weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 ```
 weggli -R 'func=cpy$' '{$func(_,$src,_($src));}' .
 weggli -R 'func=cpy$' '{$len=_($src); $func(_,$src,$len);}' .
+weggli -R 'func=cpy$' '{_ $src[$len]; $func($dst,$src,$len);}' .
 
-# this won't work due to current limitations in the query language
-# weggli -R 'func=cpy$' '{_ $src[$len]; $func($dst,$src,$len);}' .
+# the last pattern won't work with integer literals due to known limitations
 # https://github.com/weggli-rs/weggli/issues/59
 ```
 
@@ -80,22 +80,25 @@ weggli '{strlen($src)<=sizeof($dst);}' .
 weggli '{sizeof($dst)<strlen($src);}' .
 weggli '{sizeof($dst)>=strlen($src);}' .
 weggli '{$buf[strlen($buf)-1];}' .
-weggli '{malloc(strlen($buf));}' .
-weggli '{$len=strlen(_); $ptr=malloc($len);}' .
-weggli '{$len=snprintf(_); $ptr=malloc($len);}' .
+weggli -R 'func=allocf?$' '{$func(strlen($buf));}' .
+weggli -R 'func=allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
+weggli -R 'func=allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
 
-# < should also cover > as <= should also cover >= 
+# the second pattern won't work with integer literals due to known limitations
+# https://github.com/weggli-rs/weggli/issues/59
+
+# < should also cover > and <= should also cover >= 
 # however, keep all cases just to be sure
 ```
 
 ### use of pointer subtraction to determine size (CWE-469)
 ```
-weggli '{_* $p1; $p1-$p2;}' .
-weggli '{_* $p2; $p1-$p2;}' .
-weggli '{_* $p1=_; $p1-$p2;}' .
-weggli '{_* $p2=_; $p1-$p2;}' .
-weggli '_ $func(_* $p1) {$p1-$p2;}' .
-weggli '_ $func(_* $p2) {$p1-$p2;}' .
+weggli '{_* $ptr1; $ptr1-$ptr2;}' .
+weggli '{_* $ptr2; $ptr1-$ptr2;}' .
+weggli '{_* $ptr1=_; $ptr1-$ptr2;}' .
+weggli '{_* $ptr2=_; $ptr1-$ptr2;}' .
+weggli '_ $func(_* $ptr1) {$ptr1-$ptr2;}' .
+weggli '_ $func(_* $ptr2) {$ptr1-$ptr2;}' .
 ```
 
 ### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
@@ -122,7 +125,7 @@ weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var>=0;}' .
 
-# < should also cover > as <= should also cover >= 
+# < should also cover > and <= should also cover >= 
 # however, keep all cases just to be sure
 ```
 
@@ -149,7 +152,7 @@ weggli -R '$type=(unsigned|size_t)' '_ $func(int $var2) {$type $var1=_($var2);}'
 weggli -R '$type=(unsigned|size_t)' '$type $func(_) {int $var; return $var;}' .
 weggli -R '$type=(unsigned|size_t)' 'int $func(_) {$type $var; return $var;}' .
 
-# there are many possible variants...
+# there are many possible variants of these patterns...
 ```
 
 ### integer truncation (CWE-197)
@@ -168,7 +171,7 @@ weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow; $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow = $large; }' .
 
-# there are many possible variants...
+# there are many possible variants of these patterns...
 ```
 
 ### use of signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
@@ -183,20 +186,20 @@ weggli 'int _' .
 ```
 weggli -R 'func=(str|wcs)len$' '{short $len; $len=$func();}' .
 
-# some variants: short int, unsigned short, unsigned short int
+# some variants: short int, unsigned short, unsigned short int, even signed int
 ```
 
 ### integer wraparound (CWE-128, CWE-131, CWE-190, CWE-680)
 ```
-weggli -R 'func=(v|m)alloc$' '{$func(_*_);}' .
-weggli -R 'func=(v|m)alloc$' '{$func(_+_);}' .
-weggli -R 'func=(v|m)alloc$' '{$n=_*_; $func($n);}' .
-weggli -R 'func=(v|m)alloc$' '{$n=_+_; $func($n);}' .
+weggli -R 'func=allocf?$' '{$func(_*_);}' .
+weggli -R 'func=allocf?$' '{$func(_+_);}' .
+weggli -R 'func=allocf?$' '{$n=_*_; $func($n);}' .
+weggli -R 'func=allocf?$' '{$n=_+_; $func($n);}' .
 
-weggli -R 'func=(c|re|aligned_)allocf?$' '{$func(_*_);}' .
-weggli -R 'func=(c|re|aligned_)allocf?$' '{$func(_+_);}' .
-weggli -R 'func=(c|re|aligned_)allocf?$' '{$n=_*_; $func($buf,$n);}' .
-weggli -R 'func=(c|re|aligned_)allocf?$' '{$n=_+_; $func($buf,$n);}' .
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}'
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}'
 
 weggli '{$x>_||($x+$y)>_;}' .
 weggli '{$x>=_||($x+$y)>_;}' .
@@ -216,7 +219,7 @@ weggli '{$x<=_&&($x*$y)<_;}' .
 weggli '{$x<_&&($x*$y)<=_;}' .
 weggli '{$x<=_&&($x*$y)<=_;}' .
 
-# < should also cover > as <= should also cover >= 
+# < should also cover > and <= should also cover >= 
 # however, keep all cases just to be sure
 ```
 
@@ -266,7 +269,7 @@ weggli '{$ptr=alloca(_); free($ptr);}' .
 
 ### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
 ```
-weggli -R 'func=(m|c|re)alloc$' '{$ret=$func(); not:if(_($ret)){};}' .
+weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
 ```
 
 ### returning the address of a stack-allocated variable (CWE-562)
@@ -301,9 +304,9 @@ weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt"
 
 ### mismatched memory management routines (CWE-762)
 ```
-weggli -R 'func=(m|c|re)alloc$|strdn?up$' '{not:$ptr=$func(); free($ptr);}' .
+weggli -R 'func=allocf?$|strdn?up$' '{not:$ptr=$func(); free($ptr);}' .
 
-weggli --cpp -R 'func=(m|c|re)alloc$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
+weggli --cpp -R 'func=allocf?$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
 weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
 
 # apparently, delete[] is not supported so this won't work properly
@@ -383,7 +386,7 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<=_);}' .
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>_);}' .
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 
-# < should also cover > as <= should also cover >= 
+# < should also cover > and <= should also cover >= 
 # however, keep all cases just to be sure
 ```
 
