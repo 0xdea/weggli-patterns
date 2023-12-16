@@ -39,10 +39,8 @@ weggli '{strncat(_,_,sizeof(_));}' .
 weggli '{strncat(_,_,strlen(_));}' .
 weggli '{strncat($dst,$src,sizeof($dst)-strlen($dst));}' .
 weggli '{_ $buf[$len]; strncat($buf,_,$len);}' .
-
-# the last pattern won't work with integer literals due to known limitations
-# https://github.com/weggli-rs/weggli/issues/59
 ```
+The last pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).
 
 ### destination buffer access using size of source buffer (CWE-806)
 ```
