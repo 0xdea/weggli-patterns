@@ -47,19 +47,18 @@ The last pattern won't work with integer literals due to [known limitations](htt
 weggli -R 'func=cpy$' '{$func(_,$src,_($src));}' .
 weggli -R 'func=cpy$' '{$len=_($src); $func(_,$src,$len);}' .
 weggli -R 'func=cpy$' '{_ $src[$len]; $func($dst,$src,$len);}' .
-
-# the last pattern won't work with integer literals due to known limitations
-# https://github.com/weggli-rs/weggli/issues/59
 ```
+The last pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).
 
 ### use of sizeof() on a pointer type (CWE-467)
 ```
 weggli '{_* $ptr; sizeof($ptr);}' .
 weggli '{_* $ptr=_; sizeof($ptr);}' .
 weggli '_ $func(_* $ptr) {sizeof($ptr);}' .
-
-# apparently global variables are not supported so this won't work
-# weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
+```
+Apparently, global variables are not supported so this won't work:
+```
+weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
 ```
 
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
