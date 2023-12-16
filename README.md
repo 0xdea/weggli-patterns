@@ -80,7 +80,7 @@ weggli -R 'func=allocf?$' '{$func(strlen($buf));}' .
 weggli -R 'func=allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
 weggli -R 'func=allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
 ```
-The second pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).
+The second pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).  
 `<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all cases just to be sure.
 
 ### use of pointer subtraction to determine size (CWE-469)
