@@ -183,8 +183,8 @@ weggli -R 'func=allocf?$' '{$n=_+_; $func($n);}' .
 
 weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
 weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}'
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}'
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}' .
+weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}' .
 
 weggli '{$x>_||($x+$y)>_;}' .
 weggli '{$x>=_||($x+$y)>_;}' .
@@ -223,7 +223,7 @@ weggli -R 'func=alloca$' '{$func();}' .
 
 ### use after free (CWE-416)
 ```
-weggli '{free($ptr); not:$ptr=_; not:free($ptr); _($ptr);}' use-after-free.c
+weggli '{free($ptr); not:$ptr=_; not:free($ptr); _($ptr);}' .
 ```
 
 ### double free (CWE-415)
@@ -352,7 +352,7 @@ weggli -R 'func=memset(_explicit)?$' '{$func(_,sizeof(_),_);}' .
 
 ### call to rand(), srand() (CWE-330, CWE-338)
 ```
-weggli -R 'func=s?rand$' '{$func();}'
+weggli -R 'func=s?rand$' '{$func();}' .
 ```
 
 ### source and destination overlap in sprintf(), snprintf()
