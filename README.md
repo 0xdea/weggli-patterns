@@ -81,7 +81,7 @@ weggli -R 'func=allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
 weggli -R 'func=allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
 ```
 The second pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).  
-`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all cases just to be sure.
+`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
 ### use of pointer subtraction to determine size (CWE-469)
 ```
@@ -102,9 +102,8 @@ weggli -R 'func=(nprintf|lcpy|lcat)$' '{$ret=$func();}' .
 ```
 weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)$' '{_ $buf[_]; $func($buf,_);}' .
 weggli '{_ $buf[_]; $buf[_]=_;}' .
-
-# some variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom, etc.
 ```
+Some possible variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom, etc.
 
 ## integer overflows
 
@@ -116,10 +115,8 @@ weggli -R '$type=(unsigned|size_t)' '{$type $var; $var>=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var<=0;}' .
 weggli -R '$type=(unsigned|size_t)' '{$type $var=_; $var>=0;}' .
-
-# < should also cover > and <= should also cover >= 
-# however, keep all cases just to be sure
 ```
+`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
 ### signed/unsigned conversion (CWE-195, CWE-196)
 ```
@@ -143,9 +140,8 @@ weggli -R '$type=(unsigned|size_t)' '_ $func(int $var2) {$type $var1=_($var2);}'
 
 weggli -R '$type=(unsigned|size_t)' '$type $func(_) {int $var; return $var;}' .
 weggli -R '$type=(unsigned|size_t)' 'int $func(_) {$type $var; return $var;}' .
-
-# there are many possible variants of these patterns...
 ```
+There are many possible variants of these patterns...
 
 ### integer truncation (CWE-197)
 ```
@@ -162,24 +158,21 @@ weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow; $narrow = $la
 weggli -R 'type=(int|long)' '_ $func($type $large) {short $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow; $narrow = $large; }' .
 weggli '_ $func(long $large) {int $narrow = $large; }' .
-
-# there are many possible variants of these patterns...
 ```
+There are many possible variants of these patterns...
 
 ### use of signed or short sizes, lengths, offsets, counts (CWE-190, CWE-680)
 ```
 weggli 'short _' .
 weggli 'int _' .
-
-# some variants: short int, unsigned short, unsigned short int, int
 ```
+Some possible variants: short int, unsigned short, unsigned short int, int.
 
 ### cast of the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
 ```
 weggli -R 'func=(str|wcs)len$' '{short $len; $len=$func();}' .
-
-# some variants: short int, unsigned short, unsigned short int, even signed int
 ```
+Some possible variants: short int, unsigned short, unsigned short int, even signed int.
 
 ### integer wraparound (CWE-128, CWE-131, CWE-190, CWE-680)
 ```
@@ -210,19 +203,16 @@ weggli '{$x<_&&($x*$y)<_;}' .
 weggli '{$x<=_&&($x*$y)<_;}' .
 weggli '{$x<_&&($x*$y)<=_;}' .
 weggli '{$x<=_&&($x*$y)<=_;}' .
-
-# < should also cover > and <= should also cover >= 
-# however, keep all cases just to be sure
 ```
+`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
 ## format strings
 
 ### call to printf(), scanf(), syslog() family functions (CWE-134)
 ```
 weggli -R 'func=(printf|scanf|syslog)$' '{$func();}' .
-
-# some variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc
 ```
+Some possible variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc, etc.
 
 ## memory management
 
@@ -300,9 +290,10 @@ weggli -R 'func=allocf?$|strdn?up$' '{not:$ptr=$func(); free($ptr);}' .
 
 weggli --cpp -R 'func=allocf?$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
 weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
-
-# apparently, delete[] is not supported so this won't work properly
-# weggli --cpp '{not:$ptr=new $obj[$len]; delete[] $ptr;}' .
+```
+Apparently, delete[] is not supported so this won't work properly:
+```
+weggli --cpp '{not:$ptr=new $obj[$len]; delete[] $ptr;}' .
 ```
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
@@ -316,10 +307,8 @@ weggli '{_* $ptr; not:$ptr=_; not:$func(&$ptr); _($ptr);}' .
 ```
 weggli -R 'func=(system|popen)$' '{$func();}' .
 weggli -R 'func=(system|popen)$' '{$func($arg);}' .
-
-# the second pattern tries to filter out string literals,
-# but it might determine some false negatives
 ```
+The second pattern is meant to filter out string literals, but it might cause some false negatives.
 
 ## race conditions
 
@@ -371,9 +360,8 @@ weggli -R 'func=s?rand$' '{$func();}'
 weggli -R 'func=^sn?printf$' '{$func($dst,_,$dst);}' .
 weggli -R 'func=^sn?printf$' '{$func($dst,_,_,$dst);}' .
 weggli -R 'func=^sn?printf$' '{$func($dst,_,_,_,$dst);}' .
-
-# and so on...
 ```
+And so on...
 
 ### size check implemented with an assertion macro
 ```
@@ -381,10 +369,8 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<_);}' .
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<=_);}' .
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>_);}' .
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
-
-# < should also cover > and <= should also cover >= 
-# however, keep all cases just to be sure
 ```
+`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
 ### unchecked return code of scanf(), etc. (CWE-252)
 ```
@@ -404,16 +390,14 @@ weggli -R 'var=argv|envp' '{$var[_];}' .
 ### missing default case in a switch construct (CWE-478)
 ```
 weggli -l 'switch(_) {_; not:default:_; _;}' .
-
-# -l might be overkill and lead to missing additional matches in the same function
 ```
+`-l` might be overkill and lead to missing additional matches in the same function.
 
 ### missing break or equivalent statement in a switch construct (CWE-484)
 ```
 weggli -l 'switch(_) {case _: not:break; not:exit; not:return; not:goto _; case _:_;}' .
-
-# -l might be overkill and lead to missing additional matches in the same function
 ```
+`-l` might be overkill and lead to missing additional matches in the same function.
 
 ### missing return statement in a non-void function (CWE-393, CWE-394)
 ```
@@ -429,9 +413,8 @@ weggli 'if (_|_) {}' .
 weggli '{_=+_;}' .
 weggli '{_=-_;}' .
 weggli -R 'func=strn?cpy$' 'if ($func()==_) {}' .
-
-# there are many possible additional patterns...
 ```
+There are many possible additional patterns in this category...
 
 ### keywords that suggest the presence of bugs
 ```
@@ -439,6 +422,5 @@ weggli -R 'pattern=(?i)(unsafe|insecure|dangerous|warning|overflow)' '$pattern' 
 
 weggli -R 'func=(?i)(encode|decode|convert|interpret|compress|fragment|reassemble)' '_ $func(_) {}' .
 weggli -R 'func=(?i)(mutex|lock|toctou|parallelism|semaphore|retain|release|garbage|mutual)' '_ $func(_) {}' .
-
-# there are many possible additional patterns...
 ```
+There are many possible additional patterns in this category...
