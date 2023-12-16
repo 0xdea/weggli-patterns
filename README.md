@@ -64,9 +64,8 @@ weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
 weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
-
-# some variants: memcpy, read, readlink, fread, etc.
 ```
+Some possible variants: memcpy, read, readlink, fread, etc.
 
 ### off-by-one error (CWE-193)
 ```
@@ -80,13 +79,9 @@ weggli '{$buf[strlen($buf)-1];}' .
 weggli -R 'func=allocf?$' '{$func(strlen($buf));}' .
 weggli -R 'func=allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
 weggli -R 'func=allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
-
-# the second pattern won't work with integer literals due to known limitations
-# https://github.com/weggli-rs/weggli/issues/59
-
-# < should also cover > and <= should also cover >= 
-# however, keep all cases just to be sure
 ```
+The second pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).
+`<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all cases just to be sure.
 
 ### use of pointer subtraction to determine size (CWE-469)
 ```
