@@ -298,8 +298,10 @@ weggli --cpp '{not:$ptr=new $obj[$len]; delete[] $ptr;}' .
 
 ### use of uninitialized pointers (CWE-457, CWE-824, CWE-908)
 ```
-weggli '{_* $ptr; not:$ptr=_; not:$func(&$ptr); _($ptr);}' .
+weggli '{_* $ptr; not:$ptr=_; not:_(&$ptr); $func($ptr);}' .
+weggli '{_* $ptr; not:$ptr=_; not:_(&$ptr); _($ptr);}' .
 ```
+These patterns might generate many false positives that should be manually investigated.
 
 ## command injection
 
