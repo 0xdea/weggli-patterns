@@ -61,6 +61,12 @@ Apparently, global variables are not supported so this won't work:
 weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
 ```
 
+### use of sizeof() on a character constant
+```
+weggli "sizeof('_')" .
+```
+In C (but not in C++) character constants have type int.
+
 ### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
 ```
 weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
