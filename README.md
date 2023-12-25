@@ -5,8 +5,8 @@
 [![](https://img.shields.io/badge/twitter-%400xdea-blue.svg)](https://twitter.com/0xdea)
 [![](https://img.shields.io/badge/mastodon-%40raptor-purple.svg)](https://infosec.exchange/@raptor)
 
-> "No one gives a s*** about the old scene people anymore I’m sure,  
-> bunch of old a** people grepping for the last of the memcpy." 
+> "No one cares about the old scene people anymore, I’m sure,  
+> bunch of old people grepping for the last of the memcpy." 
 > 
 > -- Bas Alberts
 
