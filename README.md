@@ -17,6 +17,7 @@ https://security.humanativaspa.it/a-collection-of-weggli-patterns-for-c-cpp-vuln
 
 See also:  
 https://github.com/weggli-rs/weggli  
+https://github.com/xorpse/parascope  
 https://dustri.org/b/playing-with-weggli.html  
 https://github.com/plowsec/weggli-patterns  
 https://github.com/synacktiv/Weggli_rules_SSTIC2023  
