@@ -23,6 +23,8 @@ https://github.com/plowsec/weggli-patterns
 https://github.com/synacktiv/Weggli_rules_SSTIC2023  
 https://twitter.com/richinseattle/status/1729654184633327720  
 
+*Note: By default, weggli scans `.c` and `.h` files. To enable C++ mode and thus scan `.cc`, `.cpp`, `.cxx`, `.h`, and `.hpp` files, you must specify the `-X` command-line flag. Alternative file endings can be specified using the -e flag. Please refer to weggli's [usage documentation](https://github.com/weggli-rs/weggli?tab=readme-ov-file#usage) for additional information.*
+
 ## buffer overflows
 
 ### call to unbounded copy functions (CWE-120, CWE-242, CWE-676)
