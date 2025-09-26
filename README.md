@@ -13,7 +13,7 @@
 A collection of my weggli patterns to facilitate vulnerability research.
 
 Blog post:  
-https://security.humanativaspa.it/a-collection-of-weggli-patterns-for-c-cpp-vulnerability-research
+https://hnsecurity.it/blog/a-collection-of-weggli-patterns-for-c-cpp-vulnerability-research
 
 See also:  
 https://github.com/weggli-rs/weggli  
