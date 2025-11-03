@@ -36,6 +36,7 @@ A collection of my weggli patterns to facilitate vulnerability research.
 weggli -R 'func=^gets$' '{$func();}' .
 weggli -R 'func=st(r|p)(cpy|cat)$' '{$func();}' .
 weggli -R 'func=wc(s|p)(cpy|cat)$' '{$func();}' .
+weggli -R 'func=mb(s|p)(cpy|cat)$' '{$func();}' .
 weggli -R 'func=sprintf$' '{$func();}' .
 weggli -R 'func=scanf$' '{$func();}' .
 ```
@@ -181,9 +182,9 @@ weggli 'int _' .
 ```
 Some possible variants: short int, unsigned short, unsigned short int, int.
 
-#### cast of the return value of strlen(), wcslen() to short (CWE-190, CWE-680)
+#### cast of the return value of strlen(), wcslen(), _mbslen() to short (CWE-190, CWE-680)
 ```
-weggli -R 'func=(str|wcs)len$' '{short $len; $len=$func();}' .
+weggli -R 'func=(str|wcs|mbs)len$' '{short $len; $len=$func();}' .
 ```
 Some possible variants: short int, unsigned short, unsigned short int, even signed int.
 
