@@ -182,9 +182,9 @@ weggli 'int _' .
 ```
 Some possible variants: short int, unsigned short, unsigned short int, int.
 
-#### cast of the return value of strlen(), wcslen(), _mbslen() to short (CWE-190, CWE-680)
+#### cast of the return value of strlen(), wcslen(), _mbslen(), etc. to short (CWE-190, CWE-680)
 ```
-weggli -R 'func=(str|wcs|mbs)len$' '{short $len; $len=$func();}' .
+weggli -R 'func=(str|wcs|mbs)n?len$' '{short $len; $len=$func();}' .
 ```
 Some possible variants: short int, unsigned short, unsigned short int, even signed int.
 
