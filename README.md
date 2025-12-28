@@ -31,6 +31,10 @@ A collection of my weggli patterns to facilitate vulnerability research.
 
 *Note: By default, weggli scans `.c` and `.h` files. To enable C++ mode and thus scan `.cc`, `.cpp`, `.cxx`, `.h`, and `.hpp` files, you must specify the `-X` command-line flag. Alternative file endings can be specified using the `-e` flag. Please refer to weggli's [usage documentation](https://github.com/weggli-rs/weggli?tab=readme-ov-file#usage) for additional information.*
 
+## Compatibility
+
+* Tested with weggli 0.2.4
+
 ## Patterns
 
 ### buffer overflows
