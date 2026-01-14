@@ -346,6 +346,8 @@ weggli '{_ $ptr[]=_; $ptr2=$ptr; putenv($ptr2);}' .
 weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt");}' .
 ```
 
+Some possible variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc, etc.
+
 #### mismatched memory management routines (CWE-762)
 
 ```
@@ -433,7 +435,7 @@ weggli -R 'func=memset(_explicit)?$' '{$func(_,sizeof(_),_);}' .
 weggli -R 'func=s?rand$' '{$func();}' .
 ```
 
-#### source and destination overlap in sprintf(), snprintf()
+#### source and destination overlap in copy functions
 
 ```
 weggli -R 'func=^sn?printf$' '{$func($dst,_,$dst);}' .
@@ -441,7 +443,7 @@ weggli -R 'func=^sn?printf$' '{$func($dst,_,_,$dst);}' .
 weggli -R 'func=^sn?printf$' '{$func($dst,_,_,_,$dst);}' .
 ```
 
-And so on...
+And so on... There are many copy functions that cause undefined behavior if source and destination overlap.
 
 #### size check implemented with an assertion macro
 
