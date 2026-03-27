@@ -51,7 +51,7 @@ weggli -R 'func=sprintf$' '{$func();}' .
 weggli -R 'func=scanf$' '{$func();}' .
 ```
 
-#### incorrect use of strncat (CWE-193, CWE-787)
+#### incorrect use of `strncat` (CWE-193, CWE-787)
 
 ```sh
 weggli '{strncat(_,_,sizeof(_));}' .
@@ -72,7 +72,7 @@ weggli -R 'func=cpy$' '{_ $src[$len]; $func($dst,$src,$len);}' .
 
 The last pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).
 
-#### use of sizeof() on a pointer type (CWE-467)
+#### use of `sizeof` on a pointer type (CWE-467)
 
 ```sh
 weggli '{_* $ptr; sizeof($ptr);}' .
@@ -87,7 +87,7 @@ Apparently, global variables are not supported so this won't work:
 weggli '_* $ptr=_; _ $func(_) {sizeof($ptr);}' .
 ```
 
-#### use of sizeof() on a character constant
+#### use of `sizeof` on a character constant
 
 ```sh
 weggli "sizeof('_')" .
@@ -95,13 +95,13 @@ weggli "sizeof('_')" .
 
 In C (but not in C++) character constants have type int.
 
-#### lack of explicit NUL-termination after strncpy(), etc. (CWE-170)
+#### lack of explicit NUL-termination after `strncpy`, etc. (CWE-170)
 
 ```sh
 weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
 ```
 
-Some possible variants: memcpy, read, readlink, fread, etc.
+Some possible variants: `memcpy`, `read`, `readlink`, `fread`, etc.
 
 #### off-by-one error (CWE-193)
 
@@ -132,7 +132,7 @@ weggli '_ $func(_* $ptr1) {$ptr1-$ptr2;}' .
 weggli '_ $func(_* $ptr2) {$ptr1-$ptr2;}' .
 ```
 
-#### potentially unsafe use of the return value of snprintf(), etc. (CWE-787)
+#### potentially unsafe use of the return value of `snprintf`, etc. (CWE-787)
 
 ```sh
 weggli -R 'func=(nprintf|lcpy|lcat)$' '{$ret=$func();}' .
@@ -145,7 +145,7 @@ weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)$' '{_ $buf[_]; $func($buf,_);
 weggli '{_ $buf[_]; $buf[_]=_;}' .
 ```
 
-Some possible variants: bcopy, gets, fgets, getwd, getcwd, fread, read, pread, recv, recvfrom, etc.
+Some possible variants: `bcopy`, `gets`, `fgets`, `getwd`, `getcwd`, `fread`, `read`, `pread`, `recv`, `recvfrom`, etc.
 
 ### integer overflows
 
@@ -216,15 +216,15 @@ weggli 'short _' .
 weggli 'int _' .
 ```
 
-Some possible variants: short int, unsigned short, unsigned short int, int.
+Some possible variants: `short int`, `unsigned short`, `unsigned short int`, `int`.
 
-#### cast of the return value of strlen(), wcslen(), _mbslen(), etc. to short (CWE-190, CWE-680)
+#### cast of the return value of `strlen`, `wcslen`, `_mbslen`, etc. to short (CWE-190, CWE-680)
 
 ```sh
 weggli -R 'func=(str|wcs|mbs)n?len$' '{short $len; $len=$func();}' .
 ```
 
-Some possible variants: short int, unsigned short, unsigned short int, even signed int.
+Some possible variants: `short int`, `unsigned short`, `unsigned short int`, even `signed int`.
 
 #### integer wraparound (CWE-128, CWE-131, CWE-190, CWE-680)
 
@@ -262,17 +262,17 @@ weggli '{$x<=_&&($x*$y)<=_;}' .
 
 ### format strings
 
-#### call to printf(), scanf(), syslog() family functions (CWE-134)
+#### call to `printf`, `scanf`, `syslog` family functions (CWE-134)
 
 ```sh
 weggli -R 'func=(printf|scanf|syslog)$' '{$func();}' .
 ```
 
-Some possible variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc, etc.
+Some possible variants: `printk`, `warn`, `vwarn`, `warnx`, `vwarnx`, `err`, `verr`, `errx`, `verrx`, `warnc`, `vwarnc`, `errc`, `verrc`, etc.
 
 ### memory management
 
-#### call to alloca() (CWE-676, CWE-1325)
+#### call to `alloca` (CWE-676, CWE-1325)
 
 ```sh
 weggli -R 'func=alloca$' '{$func();}' .
@@ -290,7 +290,7 @@ weggli '{free($ptr); not:$ptr=_; not:free($ptr); _($ptr);}' .
 weggli '{free($ptr); not:$ptr=_; free($ptr);}' .
 ```
 
-#### calling free() on memory not allocated in the heap (CWE-590)
+#### calling `free` on memory not allocated in the heap (CWE-590)
 
 ```sh
 weggli '{_ $ptr[]; free($ptr);}' .
@@ -326,13 +326,13 @@ weggli '{_ *$var; return &$var;}' .
 weggli '{_ *$var=_; return &$var;}' .
 ```
 
-#### unchecked return code of malloc(), etc. (CWE-252, CWE-690)
+#### unchecked return code of `malloc`, etc. (CWE-252, CWE-690)
 
 ```sh
 weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
 ```
 
-#### call to putenv() with a stack-allocated variable (CWE-686)
+#### call to `putenv` with a stack-allocated variable (CWE-686)
 
 ```sh
 weggli '{_ $ptr[]; putenv($ptr);}' .
@@ -348,7 +348,7 @@ weggli '{_ $ptr[]=_; $ptr2=$ptr; putenv($ptr2);}' .
 weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt");}' .
 ```
 
-Some possible variants: printk, warn, vwarn, warnx, vwarnx, err, verr, errx, verrx, warnc, vwarnc, errc, verrc, etc.
+Some possible variants: `printk`, `warn`, `vwarn`, `warnx`, `vwarnx`, `err`, `verr`, `errx`, `verrx`, `warnc`, `vwarnc`, `errc`, `verrc`, etc.
 
 #### mismatched memory management routines (CWE-762)
 
@@ -359,7 +359,7 @@ weggli --cpp -R 'func=allocf?$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
 weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
 ```
 
-Apparently, delete[] is not supported so this won't work properly:
+Apparently, `delete[]` is not supported so this won't work properly:
 
 ```sh
 weggli --cpp '{not:$ptr=new $obj[$len]; delete[] $ptr;}' .
@@ -376,7 +376,7 @@ These patterns might generate many false positives that should be manually inves
 
 ### command injection
 
-#### call to system(), popen() (CWE-78, CWE-88, CWE-676)
+#### call to `system`, `popen` (CWE-78, CWE-88, CWE-676)
 
 ```sh
 weggli -R 'func=(system|popen)$' '{$func();}' .
@@ -387,19 +387,19 @@ The second pattern is meant to filter out string literals, but it might cause so
 
 ### race conditions
 
-#### call to access(), stat(), lstat() (CWE-367)
+#### call to `access`, `stat`, `lstat` (CWE-367)
 
 ```sh
 weggli -R 'func=(access|l?stat)$' '{$func();}' .
 ```
 
-#### call to mktemp(), tmpnam(), tempnam() (CWE-377)
+#### call to `mktemp`, `tmpnam`, `tempnam` (CWE-377)
 
 ```sh
 weggli -R 'func=(mktemp|te?mpnam)$' '{$func();}' .
 ```
 
-#### call to signal() (CWE-364, CWE-479, CWE-828)
+#### call to `signal` (CWE-364, CWE-479, CWE-828)
 
 ```sh
 weggli -R 'func=signal$' '{$func();}' .
@@ -416,7 +416,7 @@ weggli '{not:seteuid(0); seteuid(); not:seteuid(0); setuid();}' .
 weggli '{not:seteuid(0); seteuid(); not:seteuid(0); seteuid();}' .
 ```
 
-#### unchecked return code of setuid(), seteuid() (CWE-252)
+#### unchecked return code of `setuid`, `seteuid` (CWE-252)
 
 ```sh
 weggli -R 'func=sete?uid$' '{strict:$func();}' .
@@ -424,14 +424,14 @@ weggli -R 'func=sete?uid$' '{strict:$func();}' .
 
 ### miscellaneous
 
-#### wrong order of arguments in call to memset()
+#### wrong order of arguments in call to `memset`
 
 ```sh
 weggli -R 'func=memset(_explicit)?$' '{$func(_,_,0);}' .
 weggli -R 'func=memset(_explicit)?$' '{$func(_,sizeof(_),_);}' .
 ```
 
-#### call to rand(), srand() (CWE-330, CWE-338)
+#### call to `rand`, `srand` (CWE-330, CWE-338)
 
 ```sh
 weggli -R 'func=s?rand$' '{$func();}' .
@@ -458,13 +458,13 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 
 `<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
-#### unchecked return code of scanf(), etc. (CWE-252)
+#### unchecked return code of `scanf`, etc. (CWE-252)
 
 ```sh
 weggli -R 'func=scanf$' '{strict:$func();}' .
 ```
 
-#### call to atoi(), atol(), atof(), atoll()
+#### call to `atoi`, `atol`, `atof`, `atoll`
 
 ```sh
 weggli -R 'func=ato(i|ll?|f)$' '{$func();}' .
