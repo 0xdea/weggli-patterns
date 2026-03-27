@@ -78,6 +78,7 @@ The last pattern won't work with integer literals due to [known limitations](htt
 weggli '{_* $ptr; sizeof($ptr);}' .
 weggli '{_* $ptr=_; sizeof($ptr);}' .
 weggli '_ $func(_* $ptr) {sizeof($ptr);}' .
+weggli 'sizeof(this)' .
 ```
 
 Apparently, global variables are not supported so this won't work:
