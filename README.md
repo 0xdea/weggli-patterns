@@ -95,7 +95,7 @@ weggli "sizeof('_')" .
 
 In C (but not in C++) character constants have type int.
 
-#### lack of explicit NUL-termination after `strncpy`, etc. (CWE-170)
+#### lack of explicit NUL-termination after `strncpy`, etc. (CWE-170, CWE-126)
 
 ```sh
 weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
@@ -103,7 +103,7 @@ weggli -R 'func=ncpy$' '{$func($buf,_); not:$buf[_]=_;}' .
 
 Some possible variants: `memcpy`, `read`, `readlink`, `fread`, etc.
 
-#### off-by-one error (CWE-193)
+#### off-by-one error (CWE-193, CWE-787)
 
 ```sh
 weggli '{$buf[sizeof($buf)];}' .
@@ -132,7 +132,7 @@ weggli '_ $func(_* $ptr1) {$ptr1-$ptr2;}' .
 weggli '_ $func(_* $ptr2) {$ptr1-$ptr2;}' .
 ```
 
-#### potentially unsafe use of the return value of `snprintf`, etc. (CWE-787)
+#### potentially unsafe use of the return value of `snprintf`, etc. (CWE-131)
 
 ```sh
 weggli -R 'func=(nprintf|lcpy|lcat)$' '{$ret=$func();}' .
@@ -326,7 +326,7 @@ weggli '{_ *$var; return &$var;}' .
 weggli '{_ *$var=_; return &$var;}' .
 ```
 
-#### unchecked return code of `malloc`, etc. (CWE-252, CWE-690)
+#### unchecked return value of `malloc`, etc. (CWE-252, CWE-690)
 
 ```sh
 weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
@@ -376,11 +376,11 @@ These patterns might generate many false positives that should be manually inves
 
 ### command injection
 
-#### call to `system`, `popen` (CWE-78, CWE-88, CWE-676)
+#### call to `system`, `popen`, etc. (CWE-78, CWE-88, CWE-676)
 
 ```sh
-weggli -R 'func=(system|popen)$' '{$func();}' .
-weggli -R 'func=(system|popen)$' '{$func($arg);}' .
+weggli -R 'func=(system|popen|p2open|wordexp)$' '{$func();}' .
+weggli -R 'func=(system|popen|p2open|wordexp)$' '{$func($arg);}' .
 ```
 
 The second pattern is meant to filter out string literals, but it might cause some false negatives.
@@ -416,7 +416,7 @@ weggli '{not:seteuid(0); seteuid(); not:seteuid(0); setuid();}' .
 weggli '{not:seteuid(0); seteuid(); not:seteuid(0); seteuid();}' .
 ```
 
-#### unchecked return code of `setuid`, `seteuid` (CWE-252)
+#### unchecked return value of `setuid`, `seteuid` (CWE-252)
 
 ```sh
 weggli -R 'func=sete?uid$' '{strict:$func();}' .
@@ -424,7 +424,7 @@ weggli -R 'func=sete?uid$' '{strict:$func();}' .
 
 ### miscellaneous
 
-#### wrong order of arguments in call to `memset`
+#### wrong order of arguments in call to `memset` (CWE-683)
 
 ```sh
 weggli -R 'func=memset(_explicit)?$' '{$func(_,_,0);}' .
@@ -437,7 +437,7 @@ weggli -R 'func=memset(_explicit)?$' '{$func(_,sizeof(_),_);}' .
 weggli -R 'func=s?rand$' '{$func();}' .
 ```
 
-#### source and destination overlap in copy functions
+#### source and destination overlap in copy functions (CWE-1260)
 
 ```sh
 weggli -R 'func=^sn?printf$' '{$func($dst,_,$dst);}' .
@@ -447,7 +447,7 @@ weggli -R 'func=^sn?printf$' '{$func($dst,_,_,_,$dst);}' .
 
 And so on... There are many copy functions that cause undefined behavior if source and destination overlap.
 
-#### size check implemented with an assertion macro
+#### size check implemented with an assertion macro (CWE-754)
 
 ```sh
 weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_<_);}' .
@@ -458,19 +458,19 @@ weggli -R 'assert=(?i)^\w*assert\w*\s*$' '{$assert(_>=_);}' .
 
 `<` should also cover `>` and `<=` should also cover `>=`; however, let's keep all variants just to be sure.
 
-#### unchecked return code of `scanf`, etc. (CWE-252)
+#### unchecked return value of `scanf`, etc. (CWE-252)
 
 ```sh
 weggli -R 'func=scanf$' '{strict:$func();}' .
 ```
 
-#### call to `atoi`, `atol`, `atof`, `atoll`
+#### call to `atoi`, `atol`, `atof`, `atoll` (CWE-839)
 
 ```sh
 weggli -R 'func=ato(i|ll?|f)$' '{$func();}' .
 ```
 
-#### command-line argument or environment variable access
+#### command-line argument or environment variable access (CWE-15)
 
 ```sh
 weggli -R 'var=argv|envp' '{$var[_];}' .
@@ -498,7 +498,7 @@ weggli -l 'switch(_) {case _: not:break; not:exit; not:return; not:goto _; case 
 weggli -R 'type!=void' '$type $func(_) {_; not:return;}' .
 ```
 
-#### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483)
+#### typos with security implications (CWE-480, CWE-481, CWE-482, CWE-483, CWE-561, CWE-705, CWE-1164)
 
 ```sh
 weggli '{for (_==_;_;_) {}}' .
@@ -510,9 +510,9 @@ weggli '{_=-_;}' .
 weggli -R 'func=strn?cpy$' 'if ($func()==_) {}' .
 ```
 
-There are many possible additional patterns in this category...
+There are many possible additional patterns (and CWEs) in this category...
 
-#### keywords that suggest the presence of bugs
+#### keywords that suggest the presence of bugs (CWE-546, CWE-615)
 
 ```sh
 weggli -R 'pattern=(?i)(unsafe|insecure|dangerous|warning|overflow)' '$pattern' .
@@ -521,4 +521,4 @@ weggli -R 'func=(?i)(encode|decode|convert|interpret|compress|fragment|reassembl
 weggli -R 'func=(?i)(mutex|lock|toctou|parallelism|semaphore|retain|release|garbage|mutual)' '_ $func(_) {}' .
 ```
 
-There are many possible additional patterns in this category...
+There are many possible additional patterns (and CWEs) in this category...
