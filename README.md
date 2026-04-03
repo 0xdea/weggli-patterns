@@ -78,6 +78,7 @@ The last pattern won't work with integer literals due to [known limitations](htt
 weggli '{_* $ptr; sizeof($ptr);}' .
 weggli '{_* $ptr=_; sizeof($ptr);}' .
 weggli '_ $func(_* $ptr) {sizeof($ptr);}' .
+weggli '_ $func(_ $ptr[]) {sizeof($ptr);}' .
 weggli 'sizeof(this)' .
 ```
 
@@ -141,8 +142,8 @@ weggli -R 'func=(nprintf|lcpy|lcat)$' '{$ret=$func();}' .
 #### direct write into buffer allocated on the stack (CWE-121)
 
 ```sh
-weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)$' '{_ $buf[_]; $func($buf,_);}' .
-weggli '{_ $buf[_]; $buf[_]=_;}' .
+weggli -R 'func=(cpy|cat|memmove|memset|sn?printf)$' '{_ $buf[]; $func($buf,_);}' .
+weggli '{_ $buf[]; $buf[_]=_;}' .
 ```
 
 Some possible variants: `bcopy`, `gets`, `fgets`, `getwd`, `getcwd`, `fread`, `read`, `pread`, `recv`, `recvfrom`, etc.
