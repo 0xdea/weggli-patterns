@@ -51,6 +51,8 @@ weggli -R 'func=sprintf$' '{$func();}' .
 weggli -R 'func=scanf$' '{$func();}' .
 ```
 
+And so on... There are many possible unbounded copy functions.
+
 #### incorrect use of `strncat` (CWE-193, CWE-787)
 
 ```sh
@@ -114,9 +116,9 @@ weggli '{strlen($src)<=sizeof($dst);}' .
 weggli '{sizeof($dst)<strlen($src);}' .
 weggli '{sizeof($dst)>=strlen($src);}' .
 weggli '{$buf[strlen($buf)-1];}' .
-weggli -R 'func=allocf?$' '{$func(strlen($buf));}' .
-weggli -R 'func=allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
-weggli -R 'func=allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
+weggli -R 'func=(?i)allocf?$' '{$func(strlen($buf));}' .
+weggli -R 'func=(?i)allocf?$' '{$len=strlen(_); $ptr=$func($len);}' .
+weggli -R 'func=(?i)allocf?$' '{$len=snprintf(_); $ptr=$func($len);}' .
 ```
 
 The second pattern won't work with integer literals due to [known limitations](https://github.com/weggli-rs/weggli/issues/59).  
@@ -230,15 +232,15 @@ Some possible variants: `short int`, `unsigned short`, `unsigned short int`, eve
 #### integer wraparound (CWE-128, CWE-131, CWE-190, CWE-680)
 
 ```sh
-weggli -R 'func=allocf?$' '{$func(_*_);}' .
-weggli -R 'func=allocf?$' '{$func(_+_);}' .
-weggli -R 'func=allocf?$' '{$n=_*_; $func($n);}' .
-weggli -R 'func=allocf?$' '{$n=_+_; $func($n);}' .
+weggli -R 'func=(?i)allocf?$' '{$func(_*_);}' .
+weggli -R 'func=(?i)allocf?$' '{$func(_+_);}' .
+weggli -R 'func=(?i)allocf?$' '{$n=_*_; $func($n);}' .
+weggli -R 'func=(?i)allocf?$' '{$n=_+_; $func($n);}' .
 
-weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
-weggli -R 'alloc=allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}' .
-weggli -u -R 'alloc=allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}' .
+weggli -R 'alloc=(?i)allocf?$' -R 'copy=cpy$' '{$alloc($x*_); $copy(_,_,$x);}' .
+weggli -R 'alloc=(?i)allocf?$' -R 'copy=cpy$' '{$alloc($x+_); $copy(_,_,$x);}' .
+weggli -u -R 'alloc=(?i)allocf?$' -R 'copy=cpy$' '{$n=_*_; $alloc($n); $copy(_,_,$x);}' .
+weggli -u -R 'alloc=(?i)allocf?$' -R 'copy=cpy$' '{$n=_+_; $alloc($n); $copy(_,_,$x);}' .
 
 weggli '{$x>_||($x+$y)>_;}' .
 weggli '{$x>=_||($x+$y)>_;}' .
@@ -330,7 +332,7 @@ weggli '{_ *$var=_; return &$var;}' .
 #### unchecked return value of `malloc`, etc. (CWE-252, CWE-690)
 
 ```sh
-weggli -R 'func=allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
+weggli -R 'func=(?i)allocf?$' '{$ret=$func(); not:if(_($ret)){};}' .
 ```
 
 #### call to `putenv` with a stack-allocated variable (CWE-686)
@@ -349,14 +351,14 @@ weggli '{_ $ptr[]=_; $ptr2=$ptr; putenv($ptr2);}' .
 weggli -R 'func=printf$' -R 'fmt=(.*%\w*x.*|.*%\w*X.*|.*%\w*p.*)' '{$func("$fmt");}' .
 ```
 
-Some possible variants: `printk`, `warn`, `vwarn`, `warnx`, `vwarnx`, `err`, `verr`, `errx`, `verrx`, `warnc`, `vwarnc`, `errc`, `verrc`, etc.
+Some possible variants: `printk`, `syslog`, `warn`, `vwarn`, `warnx`, `vwarnx`, `err`, `verr`, `errx`, `verrx`, `warnc`, `vwarnc`, `errc`, `verrc`, etc.
 
 #### mismatched memory management routines (CWE-762)
 
 ```sh
-weggli -R 'func=allocf?$|strdn?up$' '{not:$ptr=$func(); free($ptr);}' .
+weggli -R 'func=(?i)allocf?$|strdn?up$' '{not:$ptr=$func(); free($ptr);}' .
 
-weggli --cpp -R 'func=allocf?$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
+weggli --cpp -R 'func=(?i)allocf?$|strn?dup$' '{not:$ptr=$func(); free($ptr);}' .
 weggli --cpp '{not:$ptr=new $obj; delete $ptr;}' .
 ```
 
@@ -394,16 +396,20 @@ The second pattern is meant to filter out string literals, but it might cause so
 weggli -R 'func=(access|l?stat)$' '{$func();}' .
 ```
 
+Some possible variants: `faccessat`, `faccessat2`, `fstatat`, etc.
+
 #### call to `mktemp`, `tmpnam`, `tempnam` (CWE-377)
 
 ```sh
 weggli -R 'func=(mktemp|te?mpnam)$' '{$func();}' .
 ```
 
+A possible variant: `tmpnam_r`.
+
 #### call to `signal` (CWE-364, CWE-479, CWE-828)
 
 ```sh
-weggli -R 'func=signal$' '{$func();}' .
+weggli -R 'func=(g|s)?signal$' '{$func();}' .
 ```
 
 ### privilege management
@@ -437,6 +443,8 @@ weggli -R 'func=memset(_explicit)?$' '{$func(_,sizeof(_),_);}' .
 ```sh
 weggli -R 'func=s?rand$' '{$func();}' .
 ```
+
+And so on... There are many weak pseudo-random number generators (e.g., the `rand48` family of functions).
 
 #### source and destination overlap in copy functions (CWE-1260)
 
