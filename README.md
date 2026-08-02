@@ -16,7 +16,7 @@ A collection of my weggli patterns to facilitate vulnerability research.
 
 ![](https://raw.githubusercontent.com/0xdea/weggli-patterns/main/.img/shrooms.jpg)
 
-## Blog post
+## Article
 
 * <https://hnsecurity.it/blog/a-collection-of-weggli-patterns-for-c-cpp-vulnerability-research>
 
